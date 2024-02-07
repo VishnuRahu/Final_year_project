@@ -1,0 +1,28 @@
+{
+  "annoucements": [
+    {
+      "title": "Faculty Meeting",
+      "description": "There will be a faculty meeting on Wednesday, February 9th, at 10:00 AM in the conference room. Attendance is mandatory.",
+      "author": "Bob",
+      "uploaded_time": "2024-02-07T08:00:00"
+    },
+    {
+      "title": "Department Seminar Series",
+      "description": "Our department seminar series continues this Friday with a presentation by Dr. Smith on recent advancements in neuroscience. All faculty and students are invited to attend.",
+      "author": "Danny",
+      "uploaded_time": "2024-02-06T15:30:00"
+    },
+    {
+      "title": "Reminder: Course Evaluations",
+      "description": "Faculty are reminded to complete course evaluations for the Fall semester. Please submit your feedback by Friday, February 14th.",
+      "author": "Nick",
+      "uploaded_time": "2024-02-05T11:45:00"
+    },
+    {
+      "title": "New Course Offering",
+      "description": "We are excited to announce a new course offering for the upcoming Spring semester: 'Introduction to Artificial Intelligence.' Please contact the department office for more information.",
+      "author": "Alex",
+      "uploaded_time": "2024-02-04T09:20:00"
+    }
+  ]
+}

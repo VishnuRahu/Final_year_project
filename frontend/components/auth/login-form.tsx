@@ -6,6 +6,8 @@ import * as z from "zod";
 
 import axios from "axios";
 
+import { useRouter } from "next/navigation";
+
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 
@@ -31,7 +33,7 @@ import{
 import { useState } from "react";
 
 export const LoginForm=()=>{
-
+    const router=useRouter();
     const [success,setSuccess]=useState("");
     const [error,seterror]=useState("");
 
@@ -44,6 +46,7 @@ export const LoginForm=()=>{
     })
 
     const onSubmit=(values:z.infer<typeof LoginSchema>)=>{
+        
         console.log(values);
         setSuccess("");
         seterror("");
@@ -59,6 +62,9 @@ export const LoginForm=()=>{
                 console.log("RESPONSE :", res.data);
                 if(res.data=="False"){
                     seterror("Invalid Credentials");
+                }
+                else{
+                    router.push("/announcements");
                 }
                 
             })

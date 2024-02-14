@@ -38,7 +38,7 @@ const AnnoucementsPage = () => {
 }, []);
 
   return ( 
-  <div>
+   <div> 
     {annoucements.map((element, index) => {
       return (
           <motion.div

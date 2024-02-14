@@ -20,7 +20,7 @@ export const BoardList=({
         "description":"hi1"
     },
     {
-        "id":"2",
+        "id":"20",
         "title":"hello1",
         "description":"hi1"
     },

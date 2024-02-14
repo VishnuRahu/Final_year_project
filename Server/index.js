@@ -13,7 +13,12 @@ require('./db/conn')
 const router=require('./routes/crudRouters');
 
 
+const itemsRouter = require("./routes/Item");
+app.use("/api/v1/items", itemsRouter);
+
+
 app.use(router);
+
 
 app.listen(port,()=>{
     console.log('Connnected to the port');

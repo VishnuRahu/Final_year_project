@@ -11,6 +11,9 @@ import {zodResolver} from "@hookform/resolvers/zod"
 
 import { RegisterSchema } from "@/schema";
 
+import { useRouter } from "next/navigation";
+
+
 import {Input} from "@/components/ui/input"
 
 import {Button} from "@/components/ui/button"
@@ -30,7 +33,7 @@ import{
 import { useState } from "react";
 
 export const RegisterForm=()=>{
-
+    const router=useRouter();
     const [success,setSuccess]=useState("");
     const [error,seterror]=useState("");
 
@@ -44,7 +47,7 @@ export const RegisterForm=()=>{
     })
 
     const onSubmit=(values:z.infer<typeof RegisterSchema>)=>{
-
+   
         setSuccess("");
         seterror("");
         console.log(values);
@@ -60,6 +63,10 @@ export const RegisterForm=()=>{
                 console.log("RESPONSE :", res.data);
                 if(res.data=="Already registered"){
                     seterror("Already registered");
+                }
+                else{
+                    router.push("/auth/login");
+
                 }
                 
             })

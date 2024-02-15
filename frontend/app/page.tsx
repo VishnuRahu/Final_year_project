@@ -1,7 +1,12 @@
 import {Button} from '@/components/ui/button'
 import {LoginButton} from '@/components/auth/login-button'
+import { RegisterButton } from '@/components/auth/register-button';
+
+import {motion} from "framer-motion"
+
 export default async function Home() {  
   return (
+    
     <main className="flex h-full flexcol items-center justify-center
     bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
     <div className='space-y-6 text-center' >
@@ -17,6 +22,11 @@ export default async function Home() {
          Sign in
          </Button>
          </LoginButton>
+         <RegisterButton>
+         <Button className="ml-5" variant='secondary' size="lg">
+         Sign up
+         </Button>
+         </RegisterButton>
        </div>
     </div>
     

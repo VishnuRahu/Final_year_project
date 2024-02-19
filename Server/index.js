@@ -17,6 +17,9 @@ const itemsRouter = require("./routes/Item");
 app.use("/api/v1/items", itemsRouter);
 
 
+const announcement_router=require("./routes/announcementroute");
+app.use(announcement_router);
+
 app.use(router);
 
 

@@ -15,7 +15,9 @@ const DashboardLayout=({
             <div className="pl-[60px] h-full">
                 <div className="flex gap-x-3 h-full">
                     <div className="h-full flex-1">
-                        <Navbar/>
+                    <h1 className="space-y-4 p-4 items-center text-center justify-center text-5xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+            Announcements
+      </h1>
                         {children}
                     </div>
                 </div>

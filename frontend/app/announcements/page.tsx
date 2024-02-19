@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Banner from "./_components/banner";
 import { motion, easeIn } from "framer-motion"
 
+
 interface Announcement {
   title: string;
   description: string;
@@ -26,7 +27,7 @@ const AnnoucementsPage = () => {
   useEffect(() => {
 
     async function load(){
-      let response = await fetch('http://localhost:3001/annoucements');
+      let response = await fetch('http://localhost:8000/getAnonuncements');
       let data: Announcement [] = await response.json();
       if(data && data?.length > 0){
         setAnnoucements(data);

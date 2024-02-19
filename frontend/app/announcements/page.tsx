@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Banner from "./_components/banner";
+import { AddAnnouncement } from "./_components/add-announcement";
 import { motion, easeIn } from "framer-motion"
 
 
@@ -27,7 +28,7 @@ const AnnoucementsPage = () => {
   useEffect(() => {
 
     async function load(){
-      let response = await fetch('http://localhost:8000/getAnonuncements');
+      let response = await fetch('http://localhost:8000/announcement');
       let data: Announcement [] = await response.json();
       if(data && data?.length > 0){
         setAnnoucements(data);
@@ -40,6 +41,7 @@ const AnnoucementsPage = () => {
 
   return ( 
    <div> 
+    <AddAnnouncement />
     {annoucements.map((element, index) => {
       return (
           <motion.div

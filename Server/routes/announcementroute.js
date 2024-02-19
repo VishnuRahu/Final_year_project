@@ -3,8 +3,8 @@ const {addAnnouncements,getAnnouncements}=require('../controllers/announcements'
 
 const router=express.Router();
 
-router.post('/addannouncement',addAnnouncements)
+router.post('/announcement',addAnnouncements)
 
-router.get('/getAnonuncements',getAnnouncements);
+router.get('/announcement',getAnnouncements);
 
 module.exports=router;

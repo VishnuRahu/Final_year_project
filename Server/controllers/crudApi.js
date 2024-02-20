@@ -153,8 +153,11 @@ const login=async(req,res)=>{
         console.log(email);
         console.log(req.body.password);
         const result=await schema.findOne({email:email});
-        console.log(result);
-        if(result && await bcrypt.compare(req.body.password,result.password) ){
+        console.log(result.isApproved);
+        if(!result.isApproved){
+            res.send("notApproved")
+        }
+        else if(result && await bcrypt.compare(req.body.password,result.password) ){
             res.send("True")
             
         }

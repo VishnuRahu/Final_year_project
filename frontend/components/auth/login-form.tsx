@@ -60,7 +60,10 @@ export const LoginForm=()=>{
             }
         }).then((res)=>{
                 console.log("RESPONSE :", res.data);
-                if(res.data=="False"){
+                if(res.data=="notApproved"){
+                    seterror("Admin not approved your request")
+                }
+                else if(res.data=="False"){
                     seterror("Invalid Credentials");
                 }
                 else{

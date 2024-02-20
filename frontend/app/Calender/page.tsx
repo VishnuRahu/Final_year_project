@@ -58,6 +58,7 @@ export default function Home() {
   function addEvent(data: DropArg) {
     const event = { ...newEvent, start: data.date.toISOString(), title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() }
     setAllEvents([...allEvents, event])
+    console.log(allEvents)
   }
 
   function handleDeleteModal(data: { event: { id: string } }) {

@@ -2,6 +2,19 @@
 
 import {CardWrapper} from "./card-wrapper"
 
+import {Toaster,toast} from "sonner";
+
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+
 import * as z from "zod";
 
 import axios from "axios";
@@ -30,46 +43,55 @@ import{
     FormLabel,
     FormMessage
 } from "@/components/ui/form";
+
 import { useState } from "react";
+
 
 export const RegisterForm=()=>{
     const router=useRouter();
     const [success,setSuccess]=useState("");
     const [error,seterror]=useState("");
+    const [position, setPosition] = useState("Faculty")
+   
 
     const form=useForm<z.infer<typeof RegisterSchema>>({
         resolver:zodResolver(RegisterSchema),
         defaultValues:{
             email:"",
             password:"",
-            name:""
+            name:"",
+            role:""
         }
     })
-
+    
     const onSubmit=(values:z.infer<typeof RegisterSchema>)=>{
    
         setSuccess("");
         seterror("");
         console.log(values);
-        axios({
-            method:"post",
-            url:"http://localhost:8000/addUser",
-            data:{
-                email:values.email,
-                password:values.password,
-                name:values.name
-            }
-        }).then((res)=>{
-                console.log("RESPONSE :", res.data);
-                if(res.data=="Already registered"){
-                    seterror("Already registered");
-                }
-                else{
-                    router.push("/auth/login");
+        toast.success("success")
+        
+        
+        // axios({
+        //     method:"post",
+        //     url:"http://localhost:8000/addUser",
+        //     data:{
+        //         email:values.email,
+        //         password:values.password,
+        //         name:values.name,
+        //         role:values.role
+        //     }
+        // }).then((res)=>{
+        //         console.log("RESPONSE :", res.data);
+        //         if(res.data=="Already registered"){
+        //             seterror("Already registered");
+        //         }
+        //         else{
+        //             router.push("/auth/login");
 
-                }
+        //         }
                 
-            })
+        //     })
     } 
 
     return(
@@ -100,6 +122,29 @@ export const RegisterForm=()=>{
                             </FormItem>
                            )}
                         />
+                        <FormItem>
+                        <FormLabel>Role : </FormLabel>
+                        <FormControl>
+                            {/* Dropdown for selecting role */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                <Button variant="outline">click and select your role</Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>Staff role</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuRadioGroup value={position} onValueChange={(selectedRole: string) => {
+                                            form.setValue("role", selectedRole); // Set the selected role in the form
+                                        }}>
+                                    <DropdownMenuRadioItem value="HOD">HOD</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="Faculty">Faculty</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="Non-teaching faculty">Non-teaching faculty</DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            </FormControl>
+                            <FormMessage />
+                       </FormItem>
                         <FormField
                            control={form.control}
                            name="name"
@@ -135,13 +180,15 @@ export const RegisterForm=()=>{
                         />
                     </div>
                     <FormSuccess message={success}/>
-                    <FormError message={error}/>
-                    <Button type="submit" className="w-full">
+                    <FormError message={error}/>                   
+                    <Button  type="submit" className="w-full">
                       Register
                     </Button>
-                </form>
 
+                </form>
+   
             </Form>
+            <Toaster/>
         </CardWrapper>
     );
 }

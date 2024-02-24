@@ -72,26 +72,26 @@ export const RegisterForm=()=>{
         toast.success("success")
         
         
-        // axios({
-        //     method:"post",
-        //     url:"http://localhost:8000/addUser",
-        //     data:{
-        //         email:values.email,
-        //         password:values.password,
-        //         name:values.name,
-        //         role:values.role
-        //     }
-        // }).then((res)=>{
-        //         console.log("RESPONSE :", res.data);
-        //         if(res.data=="Already registered"){
-        //             seterror("Already registered");
-        //         }
-        //         else{
-        //             router.push("/auth/login");
+        axios({
+            method:"post",
+            url:"http://localhost:8000/addUser",
+            data:{
+                email:values.email,
+                password:values.password,
+                name:values.name,
+                role:values.role
+            }
+        }).then((res)=>{
+                console.log("RESPONSE :", res.data);
+                if(res.data=="Already registered"){
+                    seterror("Already registered");
+                }
+                else{
+                    router.push("/auth/login");
 
-        //         }
+                }
                 
-        //     })
+            })
     } 
 
     return(

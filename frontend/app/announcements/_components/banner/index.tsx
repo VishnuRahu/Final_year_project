@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BellIcon } from "@radix-ui/react-icons"
+import { BellIcon, CrossCircledIcon, Pencil1Icon } from "@radix-ui/react-icons"
   
 interface Announcement {
     title: string;
@@ -46,11 +46,18 @@ const Banner: React.FC<Props> = ({ announcement }) => {
         <>
             <Card className="transition-colors duration-300 ease-in-out hover:bg-blue-100 hover:shadow-md">
                 <CardHeader>
-                    <div className=" flex items-center space-x-4 ">
-                        <div className="border rounded-full p-2 bg-blue-400 text-white"> <BellIcon /> </div>
-                        <div className="flex-1 space-y-1">
-                            <CardTitle> {title} </CardTitle>
-                            <CardDescription> {author} | {formatDate(uploaded_time)} </CardDescription>
+                    <div className="flex justify-between">
+                        <div className=" flex items-center space-x-4 ">
+                            <div className="border rounded-full p-2 bg-blue-400 text-white"> <BellIcon /> </div>
+                            <div className="flex-1 space-y-1">
+                                <CardTitle> {title} </CardTitle>
+                                <CardDescription> {author} | {formatDate(uploaded_time)} </CardDescription>
+                                
+                            </div>
+                        </div>
+                        <div className="flex m-1 justify-around">
+                            <div className="flex border rounded-sm p-2 m-2 hover:bg-blue-400"> <Pencil1Icon /> </div>
+                            <div className="flex border rounded-sm p-2 m-2 hover:bg-red-400"> <CrossCircledIcon /> </div>
                         </div>
                     </div>
                 </CardHeader>

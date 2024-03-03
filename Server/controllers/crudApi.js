@@ -149,21 +149,16 @@ const fetchUser=async(req,res)=>{
 
 const login=async(req,res)=>{
     try{
-        const email=req.body.email;
-        console.log(email);
-        console.log(req.body.password);
-        const result=await schema.findOne({email:email});
-        console.log(result.isApproved);
+        const email = req.body.email;
+        const result = await schema.findOne({email:email});
+
         if(!result.isApproved){
-            res.send("notApproved")
+            res.send({ success: false , message: "User account is not yet activated, Contact admin for the support" })
+        } else if(result && await bcrypt.compare(req.body.password,result.password) ){
+            res.send({ success: true , message: "Valid User", data: result })
+        } else {
+            res.send({ success: false , message: "Invalid Credentials" })
         }
-        else if(result && await bcrypt.compare(req.body.password,result.password) ){
-            res.send("True")
-            
-        }
-        else{
-            res.send("False")
-        }    
     }
     catch(e){
         console.log(e);

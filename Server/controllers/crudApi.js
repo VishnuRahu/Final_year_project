@@ -91,7 +91,7 @@ const deleteUser=async(req,res)=>{
 
 const fetchallUser=async(req,res)=>{
     try{
-        const result=await schema.find().select("-password");
+        const result=await schema.find().select("name");
         if(result){
             res.json({
                 result

@@ -14,7 +14,7 @@ export const Sidebar=()=>{
            imageSrc="/download.png" 
          /> 
          </Link>
-         <Link href={`./board`}>
+         <Link href={`./Task`}>
          <Item 
            key={2}
            id={"1232"}

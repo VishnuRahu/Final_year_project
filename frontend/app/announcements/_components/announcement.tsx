@@ -1,18 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BellIcon } from "@radix-ui/react-icons"
-  
-interface Announcement {
-    title: string;
-    description: string;
-    uploaded_time: string;
-    author: string;
+import { BellIcon, CrossCircledIcon } from "@radix-ui/react-icons"
+import { EditAnnouncement } from "@/app/announcements/_components/edit-announcement";
+import { DeleteAnnouncement } from "@/app/announcements/_components/delete-announcement";
+import { IAnnouncement } from "@/types/announcement";
+
+interface AnnouncementProps {
+    announcement: IAnnouncement;
 }
 
-type Props = {
-    announcement: Announcement;
-}
-
-const Banner: React.FC<Props> = ({ announcement }) => {
+const Announcement: React.FC<AnnouncementProps> = ({ announcement }) => {
 
     const { title, description, uploaded_time, author } = announcement;
 
@@ -46,11 +42,18 @@ const Banner: React.FC<Props> = ({ announcement }) => {
         <>
             <Card className="transition-colors duration-300 ease-in-out hover:bg-blue-100 hover:shadow-md">
                 <CardHeader>
-                    <div className=" flex items-center space-x-4 ">
-                        <div className="border rounded-full p-2 bg-blue-400 text-white"> <BellIcon /> </div>
-                        <div className="flex-1 space-y-1">
-                            <CardTitle> {title} </CardTitle>
-                            <CardDescription> {author} | {formatDate(uploaded_time)} </CardDescription>
+                    <div className="flex justify-between">
+                        <div className=" flex items-center space-x-4 ">
+                            <div className="border rounded-full p-2 bg-blue-400 text-white"> <BellIcon /> </div>
+                            <div className="flex-1 space-y-1">
+                                <CardTitle> {title} </CardTitle>
+                                <CardDescription> {author} | {formatDate(uploaded_time)} </CardDescription>
+                                
+                            </div>
+                        </div>
+                        <div className="flex m-1 justify-around">
+                            <EditAnnouncement announcement={announcement} />
+                            <DeleteAnnouncement id={announcement._id} />
                         </div>
                     </div>
                 </CardHeader>
@@ -61,4 +64,4 @@ const Banner: React.FC<Props> = ({ announcement }) => {
 
 }
 
-export default Banner
+export default Announcement

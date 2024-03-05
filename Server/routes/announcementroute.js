@@ -1,10 +1,11 @@
 const express=require('express');
-const {addAnnouncements,getAnnouncements}=require('../controllers/announcements');
+const { addOne, getAll, updateOne, deleteOne }=require('../controllers/announcements');
 
 const router=express.Router();
 
-router.post('/announcement',addAnnouncements)
-
-router.get('/announcement',getAnnouncements);
+router.post('/announcement',addOne);
+router.get('/announcements',getAll);
+router.put('/announcement', updateOne);
+router.delete('/announcement/:id', deleteOne);
 
 module.exports=router;

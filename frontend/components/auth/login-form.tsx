@@ -47,28 +47,35 @@ export const LoginForm=()=>{
 
     const onSubmit=(values:z.infer<typeof LoginSchema>)=>{
         
-        console.log(values);
         setSuccess("");
         seterror("");
-        console.log(values);
         axios({
             method:"post",
             url:"http://localhost:8000/login",
-            data:{
-                email:values.email,
-                password:values.password
-            }
+            data:{ email:values.email, password:values.password }
         }).then((res)=>{
-                console.log("RESPONSE :", res.data);
-                if(res.data=="notApproved"){
-                    seterror("Admin not approved your request")
-                }
-                else if(res.data=="False"){
-                    seterror("Invalid Credentials");
-                }
-                else{
+
+                let user = res.data?.data;
+                console.log('user :', user)
+
+                if (res?.data?.success) {
+                    localStorage.setItem("user_role", user.role);
+                    localStorage.setItem("user_id", user?._id);
                     router.push("/announcements");
+                } else {
+                    seterror(res?.data?.message)
                 }
+
+                // if(res.data=="notApproved"){
+                //     seterror("Admin not approved your request")
+                // }
+                // else if(res.data=="False"){
+                //     seterror("Invalid Credentials");
+                // }
+                // else{
+                //     localStorage.setItem("user_role", res.data )
+                //     router.push("/announcements");
+                // }
                 
             })
         

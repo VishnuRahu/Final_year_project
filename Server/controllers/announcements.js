@@ -1,16 +1,11 @@
 const schema=require("../models/announcement")
 
-const addAnnouncements=async(req,res)=>{
+const addOne = async (req,res) =>{
     try{
-        const {title,description,author}=req.body;
-        console.log(title,description,author)
-        const data=new schema(req.body);
-        const result=await data.save()
+        const data = new schema(req.body);
+        const result = await data.save()
         if(result){
-            res.json({
-                status:"success",
-                message:"announcement Detail added"
-            })
+            res.json({ status:"success", message:"announcement Detail added" })
         }
         else{
             res.send("error")
@@ -21,9 +16,9 @@ const addAnnouncements=async(req,res)=>{
 }
 
 
-const getAnnouncements=async(req,res)=>{
+const getAll = async (req, res) => {
     try{
-      const data=await schema.find();
+      const data = await schema.find();
       if(data){
         res.status(201).send(data)
       }
@@ -33,7 +28,34 @@ const getAnnouncements=async(req,res)=>{
     }
 }
 
-module.exports={
-    addAnnouncements,
-    getAnnouncements
+const updateOne = async (req,res) => {
+    try{
+        let user = req.body;
+        console.log('user :', user);
+        const data = await schema.updateOne({ _id : user._id}, user);
+        console.log('data :', data);
+        if(data){
+            return res.status(200).send({sucess: true, message: 'Post Updated!'})
+        } else {
+            return res.status(400).send({sucess: false, message: 'Error in Update'})
+        }
+    } catch (error) {
+        console.log('error :', error);
+    }
 }
+
+const deleteOne = async (req,res) => {
+    try{
+        let _id = req.params.id;
+        const data = await schema.deleteOne({ _id});
+        if(data){
+            return res.status(200).send({sucess: true, message: 'Post Updated!'})
+        } else {
+            return res.status(400).send({sucess: false, message: 'Error in Update'})
+        }
+    } catch (error) {
+        console.log('error :', error);
+    }
+}
+
+module.exports={ addOne, getAll, updateOne, deleteOne }

@@ -1,16 +1,18 @@
 "use client"
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react"
+import { useRouter } from 'next/navigation';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import axios from "axios";
 
+import { IAnnouncement } from "@/types/announcement";
 import { LoadingSpinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
+import { Pencil1Icon } from "@radix-ui/react-icons"
 import {
   Form,
   FormControl,
@@ -31,12 +33,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-const AddAnnouncement = () => {
+interface EditAnnouncementProps {
+  announcement: IAnnouncement;
+}
+
+export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({ announcement }) => {
 
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const [title, setTitle] = useState(announcement.title);
+  const [description, setDescription] = useState(announcement.description);
+  const [id, _ ] = useState(announcement._id);
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -59,27 +69,27 @@ const AddAnnouncement = () => {
   })
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { title: "", description: "" },
+    defaultValues: { title: title, description: description },
   })
 
   async function submitHandler(values: z.infer<typeof formSchema>) {
 
     setSaving(true);
 
-    // todo: need to add author name based to values object based on the current user
-    let data = JSON.stringify({ ...values, author: "alice"});
+    let data = JSON.stringify({ ...values, _id: id});
+
 
     let config = {
-      method: 'post',
+      method: 'put',
       maxBodyLength: Infinity,
       url: 'http://localhost:8000/announcement',
-      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+      headers: { 'Content-Type': 'application/json' },
       data : data
     };
 
     try {
       let response = await axios.request(config);
-      console.log('response :', response);   
+      console.log('response :', response);
     } catch (error) {
       console.log(error);   
     } finally {
@@ -87,7 +97,7 @@ const AddAnnouncement = () => {
         setOpen(false);
         setSaving(false);
         router.refresh();
-        toast("New Post Added!", {
+        toast("Post Edited!", {
           description: <span>{getCurrentDate()}</span>,
           // action: {
           //   label: "Undo",
@@ -102,17 +112,15 @@ const AddAnnouncement = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="flex justify-end">
-          <Button variant="outline" className="m-4 p-2"> Create New </Button>
-        </div>
+        <Pencil1Icon className="mr-2 h-6 w-6 border-2 rounded-md hover:bg-blue-400" />
       </DialogTrigger>
       <DialogContent className="w-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
             <fieldset disabled={saving} className="group">
               <DialogHeader>
-                <DialogTitle> Post an Announcement </DialogTitle>
-                <DialogDescription> Create a post to share something with the community </DialogDescription>
+                <DialogTitle> Edit Announcement </DialogTitle>
+                <DialogDescription> Have to reconsider what you post? </DialogDescription>
               </DialogHeader>
 
               <FormField
@@ -144,7 +152,7 @@ const AddAnnouncement = () => {
               />
 
               <DialogFooter> 
-                <Button className="mt-4 p-4" type="submit" > {saving ? <LoadingSpinner /> : <span> Create Post </span>} </Button> 
+                <Button className="mt-4 p-4" type="submit" > {saving ? <LoadingSpinner /> : <span> Update Post </span>} </Button> 
               </DialogFooter>
             </fieldset>
           </form>
@@ -156,5 +164,3 @@ const AddAnnouncement = () => {
     </Dialog>
   )
 }
-
-export default AddAnnouncement;

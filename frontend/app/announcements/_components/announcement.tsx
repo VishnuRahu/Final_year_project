@@ -1,18 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BellIcon, CrossCircledIcon, Pencil1Icon } from "@radix-ui/react-icons"
-  
-interface Announcement {
-    title: string;
-    description: string;
-    uploaded_time: string;
-    author: string;
+import { BellIcon, CrossCircledIcon } from "@radix-ui/react-icons"
+import { EditAnnouncement } from "@/app/announcements/_components/edit-announcement";
+import { DeleteAnnouncement } from "@/app/announcements/_components/delete-announcement";
+import { IAnnouncement } from "@/types/announcement";
+
+interface AnnouncementProps {
+    announcement: IAnnouncement;
 }
 
-type Props = {
-    announcement: Announcement;
-}
-
-const Banner: React.FC<Props> = ({ announcement }) => {
+const Announcement: React.FC<AnnouncementProps> = ({ announcement }) => {
 
     const { title, description, uploaded_time, author } = announcement;
 
@@ -56,8 +52,8 @@ const Banner: React.FC<Props> = ({ announcement }) => {
                             </div>
                         </div>
                         <div className="flex m-1 justify-around">
-                            <div className="flex border rounded-sm p-2 m-2 hover:bg-blue-400"> <Pencil1Icon /> </div>
-                            <div className="flex border rounded-sm p-2 m-2 hover:bg-red-400"> <CrossCircledIcon /> </div>
+                            <EditAnnouncement announcement={announcement} />
+                            <DeleteAnnouncement id={announcement._id} />
                         </div>
                     </div>
                 </CardHeader>
@@ -68,4 +64,4 @@ const Banner: React.FC<Props> = ({ announcement }) => {
 
 }
 
-export default Banner
+export default Announcement

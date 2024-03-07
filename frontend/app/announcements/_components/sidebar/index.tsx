@@ -30,12 +30,14 @@ export const Sidebar = () => {
           imageSrc="/calender.png"
         />
       </Link>
-      <Item
-        key={4}
-        id={"1234"}
-        name={"Apply Leave"}
-        imageSrc="/sick.jpeg"
-      />
+      <Link href={`./leave_approval`}>
+         <Item 
+           key={4}
+           id={"1234"}
+           name={"Apply Leave"}
+           imageSrc="/sick.jpeg" 
+         /> 
+         </Link>
     </aside>
   )
 }

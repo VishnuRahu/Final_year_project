@@ -78,8 +78,12 @@ export default function ProfileForm() {
   }
 
   return (
-    <div className="ml-5 flex justify-center w-500
-    ">
+    <div>
+    <h1 className=" p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+        Apply Leave
+      </h1>
+    <div className="ml-20 justify-center mr-60 ">
+      
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -235,6 +239,6 @@ export default function ProfileForm() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-    </div>
+    </div></div>
   )
 }

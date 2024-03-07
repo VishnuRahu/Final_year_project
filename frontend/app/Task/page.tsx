@@ -12,6 +12,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import axios from "axios";
+import {BoardList} from "@/app/dashboard/_components/sidebar/tasklist"
+
 
 import {
   Popover,
@@ -31,16 +33,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-interface Announcement {
-  title: string;
-  description: string;
-  uploaded_time: string;
-  author: string;
-}
+
+
+
 
 const BoardPage = () => {
 
-  const [annoucements, setAnnoucements] = useState<Announcement[]>([]);
+  
+  
+  //const [annoucements, setAnnoucements] = useState<Announcement[]>([]);
   const [title, setTitle] = useState("");
   const [titledes, setTitledes] = useState("")
   const [assignedto, setAssignedto] = useState("")
@@ -48,14 +49,7 @@ const BoardPage = () => {
 
   const [faculty,setFaculty]=useState([])
 
-  const variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: easeIn },
-    },
-  };
+ 
 
   const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
@@ -167,22 +161,8 @@ useEffect(() => {
       <h1 className="p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         On-going Progress
       </h1>
-      <div>
-        {annoucements.map((element, index) => {
-          return (
-            <motion.div
-              key={index}
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: index * 0.5 }} // Delay each animation
-              className="m-1 my-2 p-1"
-            >
-
-            </motion.div>
-          )
-        })}
-      </div>
+      <BoardList
+        />
     </div>
   )
 }

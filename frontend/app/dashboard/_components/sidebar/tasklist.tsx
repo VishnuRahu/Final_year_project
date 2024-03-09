@@ -1,15 +1,12 @@
 "use client"
 
 import {Boardcard} from "@/app/dashboard/_components/board-card/index"
-interface BoardListProps{
-    title:string,
-    description:string
-}
+// interface BoardListProps{
+//     title:string,
+//     description:string
+// }
 
-export const BoardList=({
-    title,
-    description
-}:BoardListProps)=>{
+export const BoardList=()=>{
     const data=[{
         "id":"1",
         "title":"hello",

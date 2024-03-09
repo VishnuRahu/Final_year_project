@@ -18,9 +18,19 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    isAided:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
     isApproved:{
         type:Boolean,
         default:false
+    },
+    signature:
+    {
+        data: Buffer,
+        contentType: String
     }
     
 })

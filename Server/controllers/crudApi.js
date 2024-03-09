@@ -1,29 +1,8 @@
 const schema=require('../models/userSchema');
 const bcrypt=require('bcrypt');
 
-const addUser=async(req,res)=>{
-    try{
-        const data=new schema(req.body);
-        const user=await schema.findOne({email:req.body.email})
-        if(!user){
-            const result=await data.save();
-            if(result=="null"){
-                res.json({
-                    status:"Failed",
-                    message:"Not able to add User Detail"
-                })
-            }
-            else{
-                res.send("Registered Successfully!")
-            }
-        }
-        else{
-            res.send("Already registered")
-        }
-    }catch(e){
-        console.log(e);
-    }
-}
+
+
 
 const updateUser=async(req,res)=>{
     
@@ -112,7 +91,7 @@ const deleteUser=async(req,res)=>{
 
 const fetchallUser=async(req,res)=>{
     try{
-        const result=await schema.find().select("-password");
+        const result=await schema.find().select("name");
         if(result){
             res.json({
                 result
@@ -202,7 +181,6 @@ const getUserById = async (req, res) => {
 }
 
 module.exports={
-    addUser,
     updateUser,
     deleteUser,
     fetchallUser,

@@ -14,7 +14,7 @@ export const Sidebar=()=>{
            imageSrc="/download.png" 
          /> 
          </Link>
-         <Link href={`./board`}>
+         <Link href={`./Task`}>
          <Item 
            key={2}
            id={"1232"}
@@ -30,12 +30,14 @@ export const Sidebar=()=>{
            imageSrc="/calender.png" 
          />
          </Link>
+         <Link href={`./leave_approval`}>
          <Item 
            key={4}
            id={"1234"}
            name={"Apply Leave"}
            imageSrc="/sick.jpeg" 
          /> 
+         </Link>
       </aside>
     )
 }

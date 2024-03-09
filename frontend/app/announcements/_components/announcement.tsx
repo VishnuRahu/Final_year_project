@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BellIcon, CrossCircledIcon } from "@radix-ui/react-icons"
+import { BellIcon } from "@radix-ui/react-icons"
 import { EditAnnouncement } from "@/app/announcements/_components/edit-announcement";
 import { DeleteAnnouncement } from "@/app/announcements/_components/delete-announcement";
 import { IAnnouncement } from "@/types/announcement";
@@ -10,7 +10,8 @@ interface AnnouncementProps {
 
 const Announcement: React.FC<AnnouncementProps> = ({ announcement }) => {
 
-    const { title, description, uploaded_time, author } = announcement;
+    const { title, description, uploaded_time, author_id, author_name } = announcement;
+    const isModifiable = author_id === localStorage.getItem("user_id");
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -47,13 +48,13 @@ const Announcement: React.FC<AnnouncementProps> = ({ announcement }) => {
                             <div className="border rounded-full p-2 bg-blue-400 text-white"> <BellIcon /> </div>
                             <div className="flex-1 space-y-1">
                                 <CardTitle> {title} </CardTitle>
-                                <CardDescription> {author} | {formatDate(uploaded_time)} </CardDescription>
+                                <CardDescription> {author_name ?? 'Anonymous'} | {formatDate(uploaded_time)} </CardDescription>
                                 
                             </div>
                         </div>
                         <div className="flex m-1 justify-around">
-                            <EditAnnouncement announcement={announcement} />
-                            <DeleteAnnouncement id={announcement._id} />
+                            {isModifiable ? <EditAnnouncement announcement={announcement} /> : null}
+                            {isModifiable ? <DeleteAnnouncement id={announcement._id} /> : null}
                         </div>
                     </div>
                 </CardHeader>

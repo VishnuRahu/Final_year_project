@@ -21,7 +21,7 @@ var storage = multer.diskStorage({
   var upload = multer({ storage: storage });
 
 
-const {updateUser,deleteUser,fetchallUser,fetchUser,fetchUsers,login,updateUserEmail}=require('../controllers/crudApi');
+const {updateUser,deleteUser,fetchallUser,fetchUser,fetchUsers,login,updateUserEmail, getUserById}=require('../controllers/crudApi');
 
 const router=express.Router();
 
@@ -70,6 +70,8 @@ router.get('/fetchallUser',fetchallUser);
 router.post('/fetchUser',fetchUser);
 
 router.get('/fetchUsers',fetchUsers);
+
+router.get('/user/:id', getUserById);
 
 
 router.post('/login',login);

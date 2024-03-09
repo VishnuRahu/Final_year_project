@@ -20,7 +20,7 @@ const getAll = async (req, res) => {
     try{
       const data = await schema.find();
       if(data){
-        res.status(201).send(data)
+        res.status(200).send(data)
       }
     }
     catch(e){
@@ -31,9 +31,7 @@ const getAll = async (req, res) => {
 const updateOne = async (req,res) => {
     try{
         let user = req.body;
-        console.log('user :', user);
         const data = await schema.updateOne({ _id : user._id}, user);
-        console.log('data :', data);
         if(data){
             return res.status(200).send({sucess: true, message: 'Post Updated!'})
         } else {

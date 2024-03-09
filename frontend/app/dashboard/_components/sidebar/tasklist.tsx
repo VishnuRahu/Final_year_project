@@ -1,64 +1,47 @@
 "use client"
 
-import {Boardcard} from "@/app/dashboard/_components/board-card/index"
-// interface BoardListProps{
-//     title:string,
-//     description:string
-// }
+import React, { useEffect, useState } from "react";
+import { Boardcard } from "@/app/dashboard/_components/board-card/index";
+import axios from "axios";
 
-export const BoardList=()=>{
-    const data=[{
-        "id":"1",
-        "title":"hello",
-        "description":"hi"
-    },{
-        "id":"2",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"20",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"21",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"22",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"23",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"24",
-        "title":"hello1",
-        "description":"hi1"
-    },
-    {
-        "id":"24",
-        "title":"ara",
-        "description":"hi1dgn;sriugnr;ui aniuahnah p;ghr;uigbygfb"
-    },]
-    return(
-       <div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4
-        lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
-           {data?.map((board)=>(
-            <Boardcard
-              key={board.id}
-              title={board.title}
-              description={board.description}
-            />
-           ))}
-        </div>
-       </div>
-    );
+interface Board {
+    id: string;
+    title: string;
+    description: string;
 }
+
+export const BoardList = () => {
+    const [data, setData] = useState<Board[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<Board[]>("http://localhost:8000/gettasks");
+                console.log("RESPONSE :", response.data);
+                setData(response.data);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    return (
+        <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
+                {data.length > 0 ? (
+                    data.map((board) => (
+                        <Boardcard
+                            key={board.id}
+                            title={board.title}
+                            description={board.description}
+                        />
+                    ))
+                ) : (
+                    <p>No data available</p>
+                )}
+            </div>
+        </div>
+    );
+};

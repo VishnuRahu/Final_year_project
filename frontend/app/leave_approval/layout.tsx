@@ -1,5 +1,4 @@
 import { Sidebar } from "../dashboard/_components/sidebar/index"
-import {Navbar} from "../dashboard/_components/sidebar/navbar"
 
 interface LeaveApprovalProps{
     children:React.ReactNode

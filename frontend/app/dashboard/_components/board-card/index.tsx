@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import Link from "next/link"
+
 
 import { Overlay } from "@/app/dashboard/_components/board-card/overlay"
 import {Footer} from "@/app/dashboard/_components/board-card/footer"
@@ -19,7 +19,7 @@ export const Boardcard=({
 
 }:BoardcardProps)=>{
     return(
-        <Link href={`/board/`}>
+        
         <div className="group aspect-[100/105] border rounded-lg flex
         flex-col justify-between overflow-hidden mr-6 ml-6">
             <div className="relative flex-1 bg-amber-50">
@@ -37,6 +37,6 @@ export const Boardcard=({
                 />
             
         </div>
-        </Link>
+        
     )
 }

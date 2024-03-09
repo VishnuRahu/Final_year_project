@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { deleteAnnouncement } from "@/api";
 
 interface DeleteAnnouncementProps {
     id: string;
@@ -40,34 +41,27 @@ export const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({id}) => {
   async function submitHandler(id: string) {
 
     setSaving(true);
-    let config = { method: 'delete', url: `http://localhost:8000/announcement/${id}` };
 
-    try {
-      let response = await axios.request(config);
-      console.log('response :', response);
+    try{
+      await deleteAnnouncement(id);
+      router.refresh();
+      toast(`Post Edited!`, { description: <span>{getCurrentDate()}</span> })
     } catch (error) {
-      console.log(error);   
+      console.log(error);
+      toast(`Something Went Wrong!`, { description: <span>{getCurrentDate()}</span> })
     } finally {
-        setTimeout(() => {
-            setOpen(false);
-            setSaving(false);
-            router.refresh();
-            toast("Post Deleted!", {
-            description: <span>{getCurrentDate()}</span>,
-            // action: {
-            //   label: "Undo",
-            //   onClick: () => console.log("Undo"),
-            // },
-            })
-        }, 2000);
+      setTimeout(() => { 
+        setOpen(false);
+        setSaving(false);
+      }, 2000);
     }
-
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-          <TrashIcon className="mr-2 h-6 w-6 border-2 rounded-md hover:bg-red-400" />
+        {/* <span> <TrashIcon className="mr-2 h-6 w-6 border-2 rounded-md hover:bg-red-400 p-1" /> delete </span> */}
+        <span className="flex w-20 mr-2 border-2 rounded-md hover:bg-red-400 p-1 place-items-center justify-around"> <TrashIcon className="" /> delete </span>
       </DialogTrigger>
       <DialogContent className="w-full">
 

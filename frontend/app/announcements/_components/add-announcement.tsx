@@ -5,31 +5,16 @@ import { useRouter } from "next/navigation";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import axios from "axios";
 
 import { LoadingSpinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { addAnnouncement, getUserById } from "@/api";
 
 const AddAnnouncement = () => {
 
@@ -37,6 +22,7 @@ const AddAnnouncement = () => {
 
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -59,44 +45,41 @@ const AddAnnouncement = () => {
   })
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { title: "", description: "" },
+    defaultValues: { title: '', description: ''},
   })
 
   async function submitHandler(values: z.infer<typeof formSchema>) {
-
     setSaving(true);
 
-    // todo: need to add author name based to values object based on the current user
-    let data = JSON.stringify({ ...values, author: "alice"});
-
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'http://localhost:8000/announcement',
-      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-      data : data
-    };
-
-    try {
-      let response = await axios.request(config);
-      console.log('response :', response);   
+    try{
+      let user_id = localStorage.getItem("user_id");
+      if(user_id){
+        let author = await getUserById(user_id);
+        if(author){
+          let payload = JSON.stringify({ ...values, author_id: author?._id, author_name: author?.name});
+          await addAnnouncement(payload);
+          router.refresh();
+          form.setValue("title", '');
+          form.setValue("description", '');
+          toast(`New Post Added!`, { description: <span>{getCurrentDate()}</span> })
+        } else {
+          console.log('invalid user');
+          toast(`Invalid User!`, { description: <span>{getCurrentDate()}</span> })
+        }
+        
+      } else {
+        console.log('unauthorized user, please try logging in again');
+        toast(`Unauthorized User!`, { description: <span>{getCurrentDate()}</span> })
+      }
     } catch (error) {
-      console.log(error);   
+      console.log(error);
+      toast(`Something Went Wrong!`, { description: <span>{getCurrentDate()}</span> })
     } finally {
-      setTimeout(() => {
+      setTimeout(() => { 
         setOpen(false);
         setSaving(false);
-        router.refresh();
-        toast("New Post Added!", {
-          description: <span>{getCurrentDate()}</span>,
-          // action: {
-          //   label: "Undo",
-          //   onClick: () => console.log("Undo"),
-          // },
-        })
       }, 2000);
     }
-
   }
 
   return (

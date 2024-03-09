@@ -1,4 +1,4 @@
-import {Sidebar} from "@/app/announcements/_components/sidebar"
+import {Sidebar} from "@/components/sidebar"
 
 
 interface BoardLayoutProps{

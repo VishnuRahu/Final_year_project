@@ -186,6 +186,21 @@ const fetchUsers=async(req,res)=>{
     }
 }
 
+const getUserById = async (req, res) => {
+    try {
+        let _id = req.params.id;
+        if(_id){
+            const user = await schema.find({_id});
+            res.status(200).send({ success: true, message: "data fetched!", data: user});
+        } else {
+            res.status(400).send({ success: false, message: "id not found in the params"});
+        }
+    } catch (error) {
+        console.log('error :', error);
+        res.status(400).send({ success: false, message: "error while fetching data", error});
+    }
+}
+
 module.exports={
     addUser,
     updateUser,
@@ -194,5 +209,6 @@ module.exports={
     fetchUser,
     fetchUsers,
     login,
-    updateUserEmail
+    updateUserEmail,
+    getUserById
 }

@@ -3,5 +3,6 @@ export interface IAnnouncement {
     title: string;
     description: string;
     uploaded_time: string;
-    author: string;
+    author_id: string;
+    author_name: string;
 }

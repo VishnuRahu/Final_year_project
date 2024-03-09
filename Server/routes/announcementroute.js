@@ -4,7 +4,7 @@ const { addOne, getAll, updateOne, deleteOne }=require('../controllers/announcem
 const router=express.Router();
 
 router.post('/announcement',addOne);
-router.get('/announcements',getAll);
+router.get('/announcement',getAll);
 router.put('/announcement', updateOne);
 router.delete('/announcement/:id', deleteOne);
 

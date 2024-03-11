@@ -1,6 +1,5 @@
 "use client"
 
-//import Banner from "@/app/announcements/_components/Ta";
 
 import { useState, useEffect,FormEvent } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -39,15 +38,16 @@ import {
 
 const BoardPage = () => {
 
-  
-  
-  //const [annoucements, setAnnoucements] = useState<Announcement[]>([]);
   const [title, setTitle] = useState("");
   const [titledes, setTitledes] = useState("")
   const [assignedto, setAssignedto] = useState("")
   const [date, setDate] = useState<Date>()
 
   const [faculty,setFaculty]=useState([])
+  const role= localStorage.getItem("user_role");
+  const isModifiable = role === "HOD";
+
+
 
  
 
@@ -73,7 +73,6 @@ const BoardPage = () => {
     async function getFaculties() {
       try {
         const response = await axios.get("http://localhost:8000/fetchallUser");
-        //console.log(response.data.result);
         setFaculty(response.data.result);
       } catch (error) {
         console.error("Error fetching faculties:", error);
@@ -92,7 +91,7 @@ useEffect(() => {
       <h1 className="space-y-4 p-4 items-center text-center justify-center text-5xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         Task Management
       </h1>
-      <form onSubmit={handleSubmit}>
+      {isModifiable ?(<form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3  lg:grid-cols-4 items-center p-5 ">
           <div className="mr-7 mb-4 sm:mb-0">
             <Input placeholder="Enter the task title" required onChange={e => setTitle(e.target.value)} value={title} />
@@ -156,11 +155,11 @@ useEffect(() => {
           </div>
 
         </div>
-      </form>
+      </form>): null}
 
-      <h1 className="p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+      {isModifiable ?(<h1 className="p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         On-going Progress
-      </h1>
+      </h1>): null}
       <BoardList
         />
     </div>

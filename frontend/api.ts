@@ -3,6 +3,11 @@ import { IAnnouncement } from "@/types/announcement";
 
 const baseUrl = "http://localhost:8000";
 
+interface UserResponse {
+    success: boolean;
+    data: any[]; // You can replace 'any' with a more specific type if you know the structure of the data
+}
+
 export const getAllAnnouncements = async (): Promise<IAnnouncement[]> => {
     const res = await fetch(`${baseUrl}/announcement`, {cache: 'no-store'});
     const announcements = await res.json();
@@ -38,7 +43,12 @@ export const deleteAnnouncement = async (id: string ) => {
 
 export const getUserById = async (id: string) => {
     let res = await fetch(`${baseUrl}/user/${id}`);
-    res = await res.json();
-    if(res?.success) return res?.data[0];
+    const responseData: UserResponse = await res.json();
+    if(responseData.success) return responseData.data[0];
     return null;
+}
+
+export const deleteTask = async (id: string ) => {
+    let config = { method: 'delete', url: `${baseUrl}/task/${id}` };
+    await axios.request(config);
 }

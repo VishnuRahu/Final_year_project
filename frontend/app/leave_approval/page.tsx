@@ -43,7 +43,10 @@ import { Input } from "@/components/ui/input"
 
 
 export default function ProfileForm() {
-  // ...
+
+
+  const role= localStorage.getItem("user_role");
+  const isModifiable = role === "HOD";
   const [selectedLeaveType, setSelectedLeaveType] = useState(""); // State to hold selected leave type
 
   const formSchema = z.object({
@@ -82,7 +85,7 @@ export default function ProfileForm() {
     <h1 className=" p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         Apply Leave
       </h1>
-    <div className="ml-20 justify-center mr-60 ">
+    <div className="flex justify-center mt-10 ml-20 mr-20 text-[50px]">
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -204,7 +207,7 @@ export default function ProfileForm() {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "w-[500px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >

@@ -1,24 +1,27 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
+
 import { Boardcard } from "@/app/dashboard/_components/board-card/index";
 import axios from "axios";
 
 interface Board {
-    id: string;
+    _id: string;
     title: string;
     description: string;
+    status:string,
+    assigned_to:string
 }
 
 export const BoardList = () => {
     const [data, setData] = useState<Board[]>([]);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get<Board[]>("http://localhost:8000/gettasks");
                 console.log("RESPONSE :", response.data);
                 setData(response.data);
+                
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -33,9 +36,11 @@ export const BoardList = () => {
                 {data.length > 0 ? (
                     data.map((board) => (
                         <Boardcard
-                            key={board.id}
+                            _id={board._id}
                             title={board.title}
                             description={board.description}
+                            status={board.status}
+                            assigned_to={board.assigned_to}
                         />
                     ))
                 ) : (

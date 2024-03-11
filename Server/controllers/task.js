@@ -30,7 +30,23 @@ const getTasks=async(req,res)=>{
     }
 }
 
+const deleteTask = async (req,res) => {
+    try{
+        let _id = req.params.id;
+        console.log(_id);
+        const data = await schema.deleteOne({ _id});
+        if(data){
+            return res.status(200).send({sucess: true, message: 'Post Updated!'})
+        } else {
+            return res.status(400).send({sucess: false, message: 'Error in Update'})
+        }
+    } catch (error) {
+        console.log('error :', error);
+    }
+}
+
 module.exports={
     addTasks,
-    getTasks
+    getTasks,
+    deleteTask
 }

@@ -7,15 +7,19 @@ import { Overlay } from "@/app/dashboard/_components/board-card/overlay"
 import {Footer} from "@/app/dashboard/_components/board-card/footer"
 
 interface BoardcardProps{
-    key:string,
+    _id:string,
     title:string,
-    description:string
+    description:string,
+    status:string,
+    assigned_to:string,
 }
 
 export const Boardcard=({
-     key,
+     _id,
      title,
-     description
+     description,
+     status,
+     assigned_to
 
 }:BoardcardProps)=>{
     return(
@@ -29,11 +33,13 @@ export const Boardcard=({
                   fill
                   className="h-0.5"
                />
-               <Overlay/>
+               <Overlay id={_id}/>
                </div>
                <Footer
                  title={title}
                  description={description}
+                 assigned_to={assigned_to}
+                 status={status}
                 />
             
         </div>

@@ -10,13 +10,13 @@ import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { deleteAnnouncement } from "@/api";
+import { deleteTask } from "@/api";
 
-interface DeleteAnnouncementProps {
+interface DeleteTaskProps {
     id: string;
   }
 
-export const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({id}) => {
+export const DeleteTask: React.FC<DeleteTaskProps> = ({id}) => {
 
   const router = useRouter();
 
@@ -26,13 +26,13 @@ export const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({id}) => {
   const getCurrentDate = () => {
     const date = new Date();
     const options = {
-      weekday: 'long', 
-      month: 'long',   
-      day: '2-digit',  
-      year: 'numeric', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true,    
+      weekday: 'long', // Display the full name of the day (e.g., "Sunday")
+      month: 'long',   // Display the full name of the month (e.g., "December")
+      day: '2-digit',  // Display the day with leading zeros (e.g., "03")
+      year: 'numeric', // Display the year (e.g., "2023")
+      hour: 'numeric', // Display the hour in 12-hour format (e.g., "9")
+      minute: 'numeric', // Display the minute (e.g., "00")
+      hour12: true,    // Use 12-hour clock (true) or 24-hour clock (false)
     } as Intl.DateTimeFormatOptions;
     const dateString = date.toLocaleDateString('en-US', options);
     return `${dateString}`;
@@ -43,7 +43,7 @@ export const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({id}) => {
     setSaving(true);
 
     try{
-      await deleteAnnouncement(id);
+      await deleteTask(id);
       router.refresh();
       toast(`Post Edited!`, { description: <span>{getCurrentDate()}</span> })
     } catch (error) {

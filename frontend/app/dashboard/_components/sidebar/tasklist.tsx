@@ -18,7 +18,7 @@ export const BoardList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Board[]>("http://localhost:8000/gettasks");
+                const response:Board[] = await fetch("http://localhost:8000/gettasks",{cache: 'no-store'});
                 console.log("RESPONSE :", response.data);
                 setData(response.data);
                 

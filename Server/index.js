@@ -13,8 +13,12 @@ require('./db/conn')
 const router=require('./routes/crudRouters');
 const task_router=require('./routes/taskrouters')
 
+const leave_router=require("./routes/leaverouter");
+app.use(leave_router);
 
 
+const leave_request_router=require("./routes/leaveRequestRouter");
+app.use(leave_request_router);
 
 const announcement_router=require("./routes/announcementroute");
 app.use(announcement_router);

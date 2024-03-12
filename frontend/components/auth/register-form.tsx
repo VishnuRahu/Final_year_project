@@ -73,7 +73,7 @@ export const RegisterForm = () => {
         }
     })
 
-    const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    const onSubmit = async(values: z.infer<typeof RegisterSchema>) => {
 
         if (!file) return;
         const formData = new FormData();
@@ -89,8 +89,17 @@ export const RegisterForm = () => {
         console.log(values);
         toast.success("success")
 
+        await axios({
+            method: "post",
+            url: "http://localhost:8000/leave",
+            data: {email:values.email}
+        }).then((res) => {
+            console.log("RESPONSE :", res.data);
+            
+        })
 
-        axios({
+
+        await axios({
             method: "post",
             url: "http://localhost:8000/addUser",
             data: formData,

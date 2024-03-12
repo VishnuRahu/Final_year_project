@@ -6,19 +6,19 @@ const leaveSchema=new mongoose.Schema({
           required:true 
         },
         casual_leave:
-        { type:number, 
+        { type:Number, 
           default:15 
         },
         Earned_leave:
-        { type:number,
+        { type:Number,
           default:10 
         },
         Medical_leave:
-        { type:number, 
+        { type:Number, 
           default:10 
         },
         Onduty:
-        { type:number, 
+        { type:Number, 
           default:7 
         },
 })

@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
+import axios from "axios";
 
 import { cn } from "@/lib/utils"
 
@@ -44,6 +45,9 @@ import { Input } from "@/components/ui/input"
 
 export default function ProfileForm() {
 
+  const handleSubmit=()=>{
+    console.log("submit form")
+  }
 
   const role= localStorage.getItem("user_role");
   const isModifiable = role === "HOD";
@@ -63,6 +67,9 @@ export default function ProfileForm() {
     to: z.date({
       required_error: "A date of birth is required.",
     }),
+    alternate_class: z.string().min(2, {
+      message: "please enter the correct alternate classes"
+    }),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,6 +85,14 @@ export default function ProfileForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+     axios({
+      method: "post",
+      url: "http://localhost:8000/leaveRequest",
+      data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class}
+    }).then((res) => {
+      console.log("RESPONSE :", res.data);
+      
+  })
   }
 
   return (
@@ -85,7 +100,7 @@ export default function ProfileForm() {
     <h1 className=" p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         Apply Leave
       </h1>
-    <div className="flex justify-center mt-10 ml-20 mr-20 text-[50px]">
+    <div className=" justify-center mt-10 ml-20 mr-20 text-[50px]">
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -237,11 +252,33 @@ export default function ProfileForm() {
                 </FormDescription>
                 <FormMessage />
               </FormItem>
+              
             )}
           />
-          <Button type="submit">Submit</Button>
+          <FormField
+            control={form.control}
+            name="alternate_class"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Alternate class Details</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Alternate class Details.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button className="w-full" type="submit">Submit</Button>
         </form>
       </Form>
-    </div></div>
+      
+    </div>
+    {isModifiable ?(<h1 className="mt-10 p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+        Leave Requests
+      </h1>): null}
+    </div>
   )
 }

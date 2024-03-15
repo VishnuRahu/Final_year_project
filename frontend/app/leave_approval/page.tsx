@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import axios from "axios";
+import { useRouter } from 'next/navigation';
 
 import { cn } from "@/lib/utils"
 
@@ -42,12 +43,9 @@ import {
 import { Input } from "@/components/ui/input"
 
 
+const ProfileForm=()=> {
 
-export default function ProfileForm() {
-
-  const handleSubmit=()=>{
-    console.log("submit form")
-  }
+ 
 
   const role= localStorage.getItem("user_role");
   const isModifiable = role === "HOD";
@@ -70,7 +68,11 @@ export default function ProfileForm() {
     alternate_class: z.string().min(2, {
       message: "please enter the correct alternate classes"
     }),
+    reason: z.string().min(2, {
+      message: "please enter the correct alternate classes"
+    }),
   })
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,7 +90,7 @@ export default function ProfileForm() {
      axios({
       method: "post",
       url: "http://localhost:8000/leaveRequest",
-      data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class}
+      data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class,reason:values.reason}
     }).then((res) => {
       console.log("RESPONSE :", res.data);
       
@@ -100,6 +102,15 @@ export default function ProfileForm() {
     <h1 className=" p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         Apply Leave
       </h1>
+    <div>
+    {isModifiable ?(
+    <div className="flex justify-end m-4">
+       <Button type="submit" onClick={() => router.push('/leave_Request')}>
+            View Leave Request
+       </Button>
+      </div>
+      ): null}
+    </div>
     <div className=" justify-center mt-10 ml-20 mr-20 text-[50px]">
       
       <Form {...form}>
@@ -257,6 +268,22 @@ export default function ProfileForm() {
           />
           <FormField
             control={form.control}
+            name="reason"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Reason</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Type your Reason for leave...
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="alternate_class"
             render={({ field }) => (
               <FormItem>
@@ -276,9 +303,14 @@ export default function ProfileForm() {
       </Form>
       
     </div>
-    {isModifiable ?(<h1 className="mt-10 p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-        Leave Requests
-      </h1>): null}
+    {/* {isModifiable ?(
+    <div>
+      
+      <ViewLeaveRequest leaveRequests={leaveRequests} />
+      </div>
+      ): null} */}
     </div>
   )
 }
+
+export default ProfileForm;

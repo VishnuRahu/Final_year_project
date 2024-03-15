@@ -18,7 +18,7 @@ export const BoardList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response:Board[] = await fetch("http://localhost:8000/gettasks",{cache: 'no-store'});
+                const response = await axios.get<Board[]>("http://localhost:8000/gettasks",);
                 console.log("RESPONSE :", response.data);
                 setData(response.data);
                 
@@ -32,6 +32,7 @@ export const BoardList = () => {
 
     return (
         <div>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
                 {data.length > 0 ? (
                     data.map((board) => (

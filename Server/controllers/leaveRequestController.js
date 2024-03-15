@@ -29,7 +29,22 @@ const getAll = async (req, res) => {
     }
 }
 
+const updateOne = async (req,res) => {
+    try{
+        let user = req.body;
+        console,log(user)
+        const data = await schema.updateOne({ _id : user._id}, user);
+        if(data){
+            return res.status(200).send({sucess: true, message: 'Post Updated!'})
+        } else {
+            return res.status(400).send({sucess: false, message: 'Error in Update'})
+        }
+    } catch (error) {
+        console.log('error :', error);
+    }
+}
 
 
 
-module.exports={ addOne, getAll }
+
+module.exports={ addOne, getAll,updateOne }

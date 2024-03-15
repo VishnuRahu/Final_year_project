@@ -25,6 +25,10 @@ const leaveRequestSchema=new mongoose.Schema({
            type:String,
            required:true
         },
+        reason:{
+           type:String,
+           required:true
+        },
         isApproved_HOD:{
             type:Boolean,
             default:false
@@ -32,6 +36,16 @@ const leaveRequestSchema=new mongoose.Schema({
         isApproved_Principal:{
             type:Boolean,
             default:false
+        },
+        comments_Hod:{
+          type:String
+        },
+        comments_Principal:{
+          type:String
+        },
+        status:{
+          type:String,
+          default:"Pending"
         }
 })
 

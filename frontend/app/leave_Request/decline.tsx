@@ -39,7 +39,6 @@ interface EditLeaveRequestProps {
 
 export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) => {
 
-
     const router = useRouter();
 
     const [open, setOpen] = useState(false);
@@ -47,26 +46,34 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
 
 
     const formSchema = z.object({
-        _id: z.string(),
-        email: z.string(),
-        designation: z.string(),
-        type_of_leave: z.string(),
-        from: z.date(),
-        to: z.date(),
-        alternate_class: z.string(),
-        comments_Hod: z.string(),
-        comments_Principal: z.string(),
-        status: z.string(),
-        reason: z.string()
+        // _id: z.string(),
+        // email: z.string(),
+        // designation: z.string(),
+        // type_of_leave: z.string(),
+        // from: z.date(),
+        // to: z.date(),
+        // alternate_class: z.string(),
+        comments_Hod: z.string().optional(),
+        // comments_Principal: z.string(),
+        // status: z.string(),
+        // reason: z.string()
 
     })
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
 
         defaultValues: {
-            _id: leaveRequest?._id, email: leaveRequest.email, designation: leaveRequest.designation, type_of_leave: leaveRequest.type_of_leave,
-            from: leaveRequest.from, to: leaveRequest.to, alternate_class: leaveRequest.alternate_class, comments_Hod: leaveRequest.comments_Hod, comments_Principal: leaveRequest.comments_principal,
-            status: leaveRequest.status, reason: leaveRequest.reason
+            // _id: leaveRequest?._id, 
+            // email: leaveRequest.email, 
+            // designation: leaveRequest.designation, 
+            // type_of_leave: leaveRequest.type_of_leave,
+            // from: leaveRequest.from, 
+            // to: leaveRequest.to, 
+            // alternate_class: leaveRequest.alternate_class, 
+            comments_Hod: leaveRequest.comments_Hod ?? '', 
+            // comments_Principal: leaveRequest.comments_principal,
+            // status: leaveRequest.status, 
+            // reason: leaveRequest.reason
         }
     })
 
@@ -76,8 +83,11 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
         setSaving(true);
         // values.status="Declined";
         //console.log("inside submit");
+
+        let data = {...leaveRequest}
+        data["comments_Hod"] = values?.comments_Hod ?? '';
         try {
-            let payload = JSON.stringify({ ...values });
+            let payload = JSON.stringify(data);
             await updateLeave(payload);
             router.refresh();
             toast(`Post Edited!`)
@@ -101,34 +111,25 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
             <DialogContent className="w-full">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
-                        <fieldset disabled={saving} className="group">
-                            <DialogHeader>
-                                <DialogTitle> Decline Leave </DialogTitle>
-                                <DialogDescription> Have to reconsider what you post? </DialogDescription>
-                            </DialogHeader>
+                    <FormField
+                        control={form.control}
+                        name="comments_Hod"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel> HOD Comments </FormLabel>
+                            <FormControl> 
+                                <Input placeholder="enter they reason for deniel" {...field} /> 
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
 
-                            <FormField
-                                control={form.control}
-                                name="comments_Hod"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel> Comments </FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="enter a suitable heading for your post" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <DialogFooter>
-                                <Button className="mt-4 p-4" type="submit">
-                                    {saving ? <LoadingSpinner /> : <span>Decline</span>}
-                                </Button>              
-                            </DialogFooter>
-                        </fieldset>
+                    <DialogFooter> 
+                        <Button className="mt-4 p-4" type="submit" > {saving ? <LoadingSpinner /> : <span> Decline </span>} </Button> 
+                    </DialogFooter>
                     </form>
                 </Form>
-
             </DialogContent>
             <Toaster />
         </Dialog>

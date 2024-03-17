@@ -32,7 +32,7 @@ const getAll = async (req, res) => {
 const updateOne = async (req,res) => {
     try{
         let user = req.body;
-        console,log(user)
+        console.log(user)
         const data = await schema.updateOne({ _id : user._id}, user);
         if(data){
             return res.status(200).send({sucess: true, message: 'Post Updated!'})

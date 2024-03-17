@@ -30,6 +30,21 @@ const getTasks=async(req,res)=>{
     }
 }
 
+const getIndtasks=async(req,res)=>{
+    try{
+      const _id=req.body._id ;
+      console.log(_id) 
+      const data=await schema.findOne({_id});
+      console.log(data)
+      if(data){
+        res.status(201).send(data)
+      }
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
 const deleteTask = async (req,res) => {
     try{
         let _id = req.params.id;
@@ -48,5 +63,6 @@ const deleteTask = async (req,res) => {
 module.exports={
     addTasks,
     getTasks,
-    deleteTask
+    deleteTask,
+    getIndtasks
 }

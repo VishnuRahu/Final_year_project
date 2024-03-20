@@ -17,8 +17,8 @@ export const getAllAnnouncements = async (): Promise<IAnnouncement[]> => {
 
 export const getAllLeaveRequest = async (): Promise<ILeave[]> => {
     const res = await fetch(`${baseUrl}/leaveRequest`, {cache: 'no-store'});
-    const announcements = await res.json();
-    return announcements;
+    const leaveRequests = await res.json();
+    return leaveRequests;
 }
 
 export const addAnnouncement = async (data: string) => {

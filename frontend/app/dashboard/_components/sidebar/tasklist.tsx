@@ -23,7 +23,8 @@ export const BoardList = () => {
         
         const fetchData = async () => {
             try {
-                const role=localStorage.getItem('role')
+                const role= localStorage.getItem('user_role')
+                console.log('role :', role);
                 const response = await axios.post<Board[]>("http://localhost:8000/gettasks",{role:role});
                 console.log("RESPONSE :", response.data);
                 setData(response.data);
@@ -42,6 +43,7 @@ export const BoardList = () => {
                 {data.length > 0 ? (
                     data.map((board) => (
                         <Boardcard
+                            key={board._id}
                             _id={board._id}
                             title={board.title}
                             description={board.description}

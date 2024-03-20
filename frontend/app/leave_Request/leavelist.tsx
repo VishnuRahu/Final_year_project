@@ -1,3 +1,4 @@
+"use client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -5,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import {ILeave} from "@/types/leaverequest"
 import {DeclineLeave} from "@/app/leave_Request/decline"
 import axios from "axios"
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react"
 
 
 interface ViewLeaveRequestProps {
@@ -13,7 +16,14 @@ interface ViewLeaveRequestProps {
 
 export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) => {
 
-    const role= localStorage.getItem("user_role");
+    const router = useRouter();
+
+    const [role, setRole] = useState("");
+
+    useEffect(() => {
+        setRole(localStorage.getItem("user_role")?? '')
+    }, [])
+    
     const handleSubmit=(_id:String)=>{
         console.log(_id,role);
         axios({
@@ -25,7 +35,7 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
             },
           }).then((res) => {
             console.log("RESPONSE :", res.data);
-      
+            router.refresh();
           })
     }
 

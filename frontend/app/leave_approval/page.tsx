@@ -106,7 +106,10 @@ const ProfileForm=()=> {
     <div>
     {isModifiable ?(
     <div className="flex justify-end m-4">
-       <Button type="submit" onClick={() => router.push('/leave_Request')}>
+       <Button type="submit" onClick={() => {
+        router.refresh();
+        router.push('/leave_Request')
+        }}>
             View Leave Request
        </Button>
       </div>

@@ -41,9 +41,9 @@ const BoardPage = () => {
   const [titledes, setTitledes] = useState("")
   const [assignedto, setAssignedto] = useState("")
   const [date, setDate] = useState<Date>()
+  const [role, setRole] = useState("");
 
   const [faculty,setFaculty]=useState([])
-  const role= localStorage.getItem("user_role");
   const isModifiable = role === "HOD";
 
 
@@ -78,6 +78,8 @@ const BoardPage = () => {
       }
     }
     getFaculties();
+
+    setRole(localStorage.getItem("user_role") ?? '')
 }, []);
 
 useEffect(() => {

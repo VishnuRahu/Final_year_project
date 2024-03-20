@@ -5,7 +5,7 @@ const {addTasks,getTasks,deleteTask,getIndtasks} =require("../controllers/task")
 
 router.post('/addTasks',addTasks);
 
-router.get('/gettasks',getTasks);
+router.post('/gettasks',getTasks);
 
 router.post('/getIndtask',getIndtasks);
 

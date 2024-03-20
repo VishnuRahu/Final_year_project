@@ -11,7 +11,10 @@ app.use(cors({
 const port=process.env.port||8000;
 require('./db/conn')
 const router=require('./routes/crudRouters');
+app.use(router);
+
 const task_router=require('./routes/taskrouters')
+app.use(task_router)
 
 const leave_router=require("./routes/leaverouter");
 app.use(leave_router);
@@ -23,9 +26,8 @@ app.use(leave_request_router);
 const announcement_router=require("./routes/announcementroute");
 app.use(announcement_router);
 
-app.use(router);
-
-app.use(task_router)
+const subtask_router=require("./routes/subtask");
+app.use(subtask_router)
 
 
 app.listen(port,()=>{

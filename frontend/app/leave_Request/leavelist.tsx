@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 
 import {ILeave} from "@/types/leaverequest"
 import {DeclineLeave} from "@/app/leave_Request/decline"
+import axios from "axios"
 
 
 interface ViewLeaveRequestProps {
@@ -11,6 +12,22 @@ interface ViewLeaveRequestProps {
 } 
 
 export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) => {
+
+    const role= localStorage.getItem("user_role");
+    const handleSubmit=(_id:String)=>{
+        console.log(_id,role);
+        axios({
+            method: "put",
+            url: "http://localhost:8000/leaveRequestApproval",
+            data: {
+              _id:_id,
+              role:role    
+            },
+          }).then((res) => {
+            console.log("RESPONSE :", res.data);
+      
+          })
+    }
 
     return (
         <>
@@ -36,7 +53,7 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
             
             
             <div className="flex  p-6 justify-center ">
-                        <Button className="mr-9" variant={"destructive"} >Accept</Button>   
+                        <Button className="mr-9" variant={"destructive"} onClick={()=>{handleSubmit(leaveRequest._id)}}>Accept</Button>   
                         <DeclineLeave leaveRequest={leaveRequest}/> 
             </div>
             </Card>

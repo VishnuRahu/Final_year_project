@@ -20,6 +20,7 @@ const addTasks=async(req,res)=>{
 }
 const getTasks=async(req,res)=>{
     try{
+      console.log(req.body.role)  
       const data=await schema.find();
       if(data){
         res.status(201).send(data)

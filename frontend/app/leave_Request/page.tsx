@@ -2,18 +2,22 @@
 import {ViewLeaveRequest} from "@/app/leave_Request/viewLeaveList"
 import { useState,useEffect } from "react"
 
+import { useRouter } from 'next/navigation';
 
 import {ILeave} from "@/types/leaverequest"
 import { getAllLeaveRequest } from "@/api"
 
 export default  function LeaveRequestPage() {
 
+  const router=useRouter();
+
   const [leaveRequests, setLeaveRequests] = useState<ILeave[]>([]);
   useEffect(() => {
-    // Fetch data when the component mounts
+
     const fetchData = async () => {
       try {
         const fetchedLeaveRequests: ILeave[] = await getAllLeaveRequest();
+        router.refresh();
         setLeaveRequests(fetchedLeaveRequests);
       } catch (error) {
         console.error("Error fetching leave requests:", error);

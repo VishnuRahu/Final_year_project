@@ -93,6 +93,7 @@ const ProfileForm=()=> {
       data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class,reason:values.reason}
     }).then((res) => {
       console.log("RESPONSE :", res.data);
+      form.reset();
       
   })
   }
@@ -215,7 +216,7 @@ const ProfileForm=()=> {
                   </PopoverContent>
                 </Popover>
                 <FormDescription>
-                  Your date of birth is used to calculate your age.
+                  Starting leave Date.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -259,7 +260,7 @@ const ProfileForm=()=> {
                   </PopoverContent>
                 </Popover>
                 <FormDescription>
-                  Your date of birth is used to calculate your age.
+                 Ending leave Date.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

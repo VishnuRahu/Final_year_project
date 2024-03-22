@@ -1,4 +1,3 @@
-"use client"
 
 import Image from "next/image";
 
@@ -17,7 +16,7 @@ interface BoardcardProps{
     assigned_to:string,
 }
 
-export const Boardcard=({
+export const Boardcard: React.FC<BoardcardProps>=({
      _id,
      title,
      description,

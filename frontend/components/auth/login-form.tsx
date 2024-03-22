@@ -61,6 +61,8 @@ export const LoginForm=()=>{
                 if (res?.data?.success) {
                     localStorage.setItem("user_role", user.role);
                     localStorage.setItem("user_id", user?._id);
+                    localStorage.setItem("user_name",user?.name);
+                    localStorage.setItem("user_email",user?.email);
                     router.push("/announcements");
                 } else {
                     seterror(res?.data?.message)

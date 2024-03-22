@@ -20,11 +20,20 @@ const addTasks=async(req,res)=>{
 }
 const getTasks=async(req,res)=>{
     try{
-      console.log(req.body.role)  
-      const data=await schema.find();
-      if(data){
-        res.status(201).send(data)
+      console.log(req.body.role) 
+      if(req.body.role=="HOD"){
+        const data=await schema.find({status:"Inprogress"});
+        if(data){
+          res.status(201).send(data)
+        }
       }
+      else if(req.body.role=="Faculty"){
+        const data=await schema.find({name:req.body.name});
+        if(data){
+            res.status(201).send(data)
+        }
+      } 
+      
     }
     catch(e){
         console.log(e)

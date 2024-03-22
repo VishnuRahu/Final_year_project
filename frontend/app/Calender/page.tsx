@@ -8,6 +8,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 import { EventSourceInput } from '@fullcalendar/core/index.js'
 
+import axios from "axios";
+
 
 interface Event {
   title: string;
@@ -17,6 +19,9 @@ interface Event {
 }
 
 export default function Home() {
+
+   const usermail=localStorage.getItem("user_email");
+
   const [events, setEvents] = useState([
     { title: 'event 1', id: '1' },
     { title: 'event 2', id: '2' },
@@ -48,17 +53,54 @@ export default function Home() {
         }
       })
     }
+    const getevent=async()=>{
+      await axios({
+        method: "post",
+        url: "http://localhost:8000/getEvents",
+        data: {
+          email:usermail,   
+        },
+      }).then((res) => {
+        console.log("RESPONSE :", res.data[0].events);
+        setAllEvents(res.data[0].events)
+       
+      })
+    }
+    getevent();
+
   }, [])
 
   function handleDateClick(arg: { date: Date, allDay: boolean }) {
-    setNewEvent({ ...newEvent, start: arg.date, allDay: arg.allDay, id: new Date().getTime() })
-    setShowModal(true)
+    const clickedDate = arg.date;
+  const currentDate = new Date();
+
+  if (clickedDate > currentDate) {
+    setNewEvent({ ...newEvent, start: arg.date, allDay: arg.allDay, id: new Date().getTime() });
+    setShowModal(true);
+  } else {
+    alert('Events can only be added for future dates.');
+  }
   }
 
   function addEvent(data: DropArg) {
     const event = { ...newEvent, start: data.date.toISOString(), title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() }
     setAllEvents([...allEvents, event])
-    console.log(allEvents)
+    console.log(allEvents);
+
+    const addevent=async()=>{
+      await axios({
+        method: "post",
+        url: "http://localhost:8000/calender",
+        data: {
+          email:usermail,
+          events:allEvents    
+        },
+      }).then((res) => {
+        console.log("RESPONSE :", res.data);
+       
+      })
+    }
+    addevent();
   }
 
   function handleDeleteModal(data: { event: { id: string } }) {

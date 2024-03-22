@@ -3,9 +3,7 @@ import {BoardList} from "@/app/dashboard/_components/sidebar/tasklist"
 
 const DashboardPage=()=>{
     return(
-        <BoardList
-        />
-        
+        <BoardList/>
     )
 }
 

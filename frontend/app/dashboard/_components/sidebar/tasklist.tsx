@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import { Boardcard } from "@/app/dashboard/_components/board-card/index";
 import axios from "axios";
+import { useRouter } from 'next/navigation';
+
 
 interface Board {
     _id: string;
@@ -15,20 +17,22 @@ interface Board {
 
 export const BoardList = () => {
     const [data, setData] = useState<Board[]>([]);
-    
-    // const role=localStorage.getItem('role')
-    // console.log('inside useeffect',role)
-    
+    const router = useRouter();
+
     useEffect(() => {
         
         const fetchData = async () => {
             try {
-                const role= localStorage.getItem('user_role')
-                console.log('role :', role);
-                const response = await axios.post<Board[]>("http://localhost:8000/gettasks",{role:role});
+                const storedName = localStorage.getItem('user_name');
+                const storedRole = localStorage.getItem('user_role');
+                const response = await axios.post<Board[]>("http://localhost:8000/gettasks",{role:storedRole,name:storedName}, {
+                    headers: {
+                        cache: 'no-store'
+                    }
+                });
                 console.log("RESPONSE :", response.data);
-                setData(response.data);
-                
+                setData(response.data); 
+                router.refresh();  
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -36,7 +40,6 @@ export const BoardList = () => {
 
         fetchData();
     }, []);
-
     return (
         <div>  
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">

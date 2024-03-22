@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IAnnouncement } from "@/types/announcement";
 import {ILeave} from "@/types/leaverequest"
+import {Board} from "@/types/Board"
 
 const baseUrl = "http://localhost:8000";
 
@@ -19,6 +20,20 @@ export const getAllLeaveRequest = async (): Promise<ILeave[]> => {
     const res = await fetch(`${baseUrl}/leaveRequest`, {cache: 'no-store'});
     const leaveRequests = await res.json();
     return leaveRequests;
+}
+
+export const getTasks = async (role: string, name: string): Promise<Board[]> => {
+    const res = await fetch(`${baseUrl}/gettasks`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store'
+        },
+        body: JSON.stringify({ role, name })
+    });
+
+    const boards = await res.json();
+    return boards;
 }
 
 export const addAnnouncement = async (data: string) => {

@@ -27,7 +27,10 @@ const announcement_router=require("./routes/announcementroute");
 app.use(announcement_router);
 
 const subtask_router=require("./routes/subtask");
-app.use(subtask_router)
+app.use(subtask_router);
+
+const calender_router=require("./routes/calender");
+app.use(calender_router);
 
 
 app.listen(port,()=>{

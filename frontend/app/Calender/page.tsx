@@ -68,7 +68,10 @@ export default function Home() {
     }
     getevent();
 
-  }, [])
+  }, [usermail])
+
+  
+  
 
   function handleDateClick(arg: { date: Date, allDay: boolean }) {
     const clickedDate = arg.date;
@@ -83,6 +86,7 @@ export default function Home() {
   }
 
   function addEvent(data: DropArg) {
+    const title = data.draggedEl?.innerText || '';
     const event = { ...newEvent, start: data.date.toISOString(), title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() }
     setAllEvents([...allEvents, event])
     console.log(allEvents);
@@ -110,6 +114,21 @@ export default function Home() {
 
   function handleDelete() {
     setAllEvents(allEvents.filter(event => Number(event.id) !== Number(idToDelete)))
+    console.log("all events",allEvents)
+    const deleteEvent=async()=>{
+      await axios({
+        method: "delete",
+        url: "http://localhost:8000/calender",
+        data: {
+          email:usermail,
+          eventsId:Number(idToDelete)  
+        },
+      }).then((res) => {
+        console.log("RESPONSE :", res.data);
+       
+      })
+    }
+    deleteEvent();
     setShowDeleteModal(false)
     setIdToDelete(null)
   }
@@ -134,15 +153,24 @@ export default function Home() {
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setAllEvents([...allEvents, newEvent])
-    setShowModal(false)
+    e.preventDefault();
+    const event = { ...newEvent, id: new Date().getTime() };
+    setAllEvents([...allEvents, event]);
+    setShowModal(false);
     setNewEvent({
       title: '',
       start: '',
       allDay: false,
       id: 0
-    })
+    });
+    // const dropArgData = {
+    //   date: new Date(event.start),
+    //   view: null,
+    //   dateStr: '',
+    //   draggedEl: {} as HTMLElement,
+    //   allDay: event.allDay
+    // };
+    // addEvent(dropArgData);
   }
 
   return (

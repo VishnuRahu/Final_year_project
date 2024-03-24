@@ -2,14 +2,31 @@ const schema=require("../models/calender")
 
 const addOne = async (req,res) =>{
     try{
-        const data = new schema(req.body);
-        const result = await data.save()
-        if(result){
-            res.json({ status:"success", message:"announcement Detail added" })
+        console.log(req.body)
+        const email=req.body.email
+        const data=await schema.findOne({email:email})
+        console.log(data)
+        if(data){
+            const result=await schema.updateOne({email:email},{$set:{events:req.body.events}})
+            if(result){
+                res.send("success")
+            }
+            else{
+                res.send("error")
+            }
         }
         else{
-            res.send("error")
+            const data = new schema(req.body);
+            const result = await data.save()
+            if(result){
+                res.json({ status:"success", message:"calender Detail added" })
+            }
+            else{
+                res.send("error")
+            }
         }
+
+        
     }catch(error){
         console.log(error)
     }
@@ -30,6 +47,17 @@ const getAll = async (req, res) => {
     }
 }
 
+const deleteEvent=async(req,res)=>{
+    console.log(req.body)
+    try{
+    const query=await schema.updateOne({"email":req.body.email},{$pull:{"events":{"id":req.body.eventsId}}})
+    if(query){
+        res.send("event deleted successfully")
+    }
+    }catch(err){
+        console.log(err)
+    }
+}
 
 
-module.exports={ addOne, getAll}
+module.exports={ addOne, getAll,deleteEvent}

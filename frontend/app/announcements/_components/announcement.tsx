@@ -11,7 +11,8 @@ interface AnnouncementProps {
 const Announcement: React.FC<AnnouncementProps> = ({ announcement }) => {
 
     const { title, description, uploaded_time, author_id, author_name } = announcement;
-    const isModifiable = author_id === localStorage.getItem("user_id");
+    const user_id = localStorage.getItem("user_id") ?? ''
+    const isModifiable = author_id === user_id;
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);

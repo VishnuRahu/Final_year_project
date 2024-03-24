@@ -1,7 +1,9 @@
 const express=require('express');
 const router=express.Router();
 
-const {addTasks,getTasks,deleteTask,getIndtasks} =require("../controllers/task")
+const {addTasks,getTasks,deleteTask,getIndtasks, getTasksById} = require("../controllers/task")
+
+router.get('/tasks/:id', getTasksById);
 
 router.post('/addTasks',addTasks);
 

@@ -1,8 +1,8 @@
 const schema=require("../models/tasks")
+const userSchema = require("../models/userSchema");
 
 const addTasks=async(req,res)=>{
     try{
-        console.log("inside tasks");
         const data=new schema(req.body);
         const result=await data.save()
         if(result){
@@ -20,7 +20,6 @@ const addTasks=async(req,res)=>{
 }
 const getTasks=async(req,res)=>{
     try{
-      console.log(req.body.role) 
       if(req.body.role=="HOD"){
         const data=await schema.find({status:"Inprogress"});
         if(data){
@@ -40,12 +39,37 @@ const getTasks=async(req,res)=>{
     }
 }
 
+const getTasksById = async (req, res) => {
+    const id = req.params.id;
+    
+    try {
+        if(id){
+            const user = await userSchema.findOne({ _id: id}).select("role");
+            let role = user?.role;
+            if(role=="HOD"){
+                const data = await schema.find({status:"Inprogress"});
+                if(data){
+                    return res.status(200).send(data)
+                }
+            }
+            else if(role=="Faculty"){
+                const data = await schema.find({name:req.body.name});
+                if(data){
+                    return res.status(200).send(data)
+                }
+            }
+        }    
+    } catch (error) {
+        console.log('error :', error);
+    }
+
+    return res.status(400).send({success: false, message: 'Data Not Found'})
+}
+
 const getIndtasks=async(req,res)=>{
     try{
       const _id=req.body._id ;
-      console.log(_id) 
       const data=await schema.findOne({_id});
-      console.log(data)
       if(data){
         res.status(201).send(data)
       }
@@ -74,5 +98,6 @@ module.exports={
     addTasks,
     getTasks,
     deleteTask,
-    getIndtasks
+    getIndtasks,
+    getTasksById
 }

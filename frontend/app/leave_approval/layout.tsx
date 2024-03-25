@@ -1,4 +1,4 @@
-import { Sidebar } from "../dashboard/_components/sidebar/index"
+import {Sidebar} from "@/components/sidebar";
 
 interface LeaveApprovalProps{
     children:React.ReactNode

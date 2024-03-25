@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { motion, easeIn } from "framer-motion"
-import Task from "@/app/tasks/[id]/_components/task";
+// import Task from "@/app/tasks/[id]/_components/task";
 import { ITask } from "@/types/tasks";
 import { Boardcard } from "@/app/tasks/[id]/_components/board-card/index";
 
@@ -12,6 +12,8 @@ type Props = {
 }
 
 const ViewTasks: React.FC<Props> = ({ tasks }) => {
+
+  
 
   const variants = {
     hidden: { opacity: 0, y: 50 },

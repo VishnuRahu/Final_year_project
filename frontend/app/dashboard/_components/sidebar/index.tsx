@@ -3,6 +3,8 @@ import {Item} from "./items"
 import Link from "next/link"
 
 export const Sidebar=()=>{
+  const id = localStorage.getItem("user_id");
+
     return(
       <aside className="fixed z-[1] left-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800
       h-full w-[60px] frex p-3 flex-col gap-y-4 text-white">
@@ -14,14 +16,7 @@ export const Sidebar=()=>{
            imageSrc="/download.png" 
          /> 
          </Link>
-         <Link href={`./Task`}>
-         <Item 
-           key={2}
-           id={"1232"}
-           name={"Tasks"}
-           imageSrc="/task.jpeg" 
-         /> 
-         </Link>
+         <Link href={`/tasks/${id}`}> <Item key={2} id={"1232"} name={"Tasks"} imageSrc="/task.jpeg" /> </Link>
          <Link href={`./Calender`}>
           <Item 
            key={3}

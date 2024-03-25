@@ -1,4 +1,4 @@
-import { Sidebar } from "../dashboard/_components/sidebar/index"
+import {Sidebar} from "@/components/sidebar";
 
 interface LeaveRequestProps{
     children:React.ReactNode

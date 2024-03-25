@@ -1,6 +1,8 @@
 import '@/app/Calender/global.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import {Sidebar} from "@/components/sidebar";
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +17,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    
     <html lang="en">
+      <Sidebar/>
       <body className={inter.className}>{children}</body>
     </html>
   )

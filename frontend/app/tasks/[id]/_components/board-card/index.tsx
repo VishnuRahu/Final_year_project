@@ -38,7 +38,7 @@ export const Boardcard: React.FC<BoardcardProps>=({
                />
                <Overlay id={_id}/>
                </div>
-               <Link href={`./ind_task?id=${_id}`}>
+               <Link href={`/ind_task?id=${_id}`}>
                <Footer
                  title={title}
                  description={description}

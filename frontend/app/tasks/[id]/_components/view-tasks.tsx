@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { motion, easeIn } from "framer-motion"
-// import Task from "@/app/tasks/[id]/_components/task";
 import { ITask } from "@/types/tasks";
 import { Boardcard } from "@/app/tasks/[id]/_components/board-card/index";
 
@@ -26,7 +25,7 @@ const ViewTasks: React.FC<Props> = ({ tasks }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
-      {tasks.map((task, index) => (
+      {tasks?.map((task, index) => (
           <motion.div
           key={task._id}
           variants={variants}

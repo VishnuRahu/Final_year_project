@@ -51,8 +51,7 @@ const getTasksById = async (req, res) => {
                 if(data){
                     return res.status(200).send(data)
                 }
-            }
-            else if(role=="Faculty"){
+            } else if(role=="Faculty"){
                 const data = await schema.find({name:req.body.name});
                 if(data){
                     return res.status(200).send(data)

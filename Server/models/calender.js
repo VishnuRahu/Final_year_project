@@ -17,6 +17,10 @@ const calenderSchema=new mongoose.Schema({
             allDay:{
                 type:Boolean
             },
+            id:{
+                type:Number,
+                required:true
+            }
         }]
 })
 

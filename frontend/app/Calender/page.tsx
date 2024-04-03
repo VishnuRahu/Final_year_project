@@ -7,6 +7,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 import { EventSourceInput } from '@fullcalendar/core/index.js'
+import {Sidebar} from "@/components/sidebar";
 
 import axios from "axios";
 
@@ -20,7 +21,8 @@ interface Event {
 
 export default function Home() {
 
-   const usermail=localStorage.getItem("user_email");
+  const [usermail,setEmail]=useState('')
+
 
   const [events, setEvents] = useState([
     { title: 'event 1', id: '1' },
@@ -41,6 +43,7 @@ export default function Home() {
   })
 
   useEffect(() => {
+    setEmail(localStorage.getItem("user_email")??"")
     let draggableEl = document.getElementById('draggable-el')
     if (draggableEl) {
       new Draggable(draggableEl, {
@@ -175,10 +178,11 @@ export default function Home() {
 
   return (
     <>
+      <Sidebar/>
       <h1 className="space-y-4 p-4 items-center text-center justify-center text-5xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
             Calendar
       </h1>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <main className="ml-[150px] flex min-h-screen flex-col items-center justify-between p-24">
         <div className="grid grid-cols-10">
           <div className="col-span-8">
             <FullCalendar

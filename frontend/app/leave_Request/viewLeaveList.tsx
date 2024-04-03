@@ -23,19 +23,31 @@ export const ViewLeaveRequest: React.FC<ViewLeaveRequestProps> = ({ leaveRequest
       };
 
     return (
-        <>
-            {leaveRequests.map((leaveRequest, index) => (
-                <motion.div
-                key={leaveRequest._id}
-                variants={variants}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: index * 0.5 }} // Delay each animation
-                className="m-1 my-2 p-1"
-              >
-              <LeaveRequest leaveRequest={leaveRequest}/>
-              </motion.div>
-                ))}
-        </>
+      <>
+      
+      {leaveRequests.length === 0 ? (
+        <div className=" flex flex-col items-center">
+          <img
+            src="/sick.jpeg"
+            alt="No Leave Requests"
+            className="max-w-xs mt-[150px]"
+          />
+          <p>No leave requests found.</p>
+        </div>
+      ) : (
+        leaveRequests.map((leaveRequest, index) => (
+          <motion.div
+            key={leaveRequest._id}
+            variants={variants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: index * 0.5 }} // Delay each animation
+            className="m-1 my-2 p-1"
+          >
+            <LeaveRequest leaveRequest={leaveRequest} />
+          </motion.div>
+        ))
+      )}
+    </>
     )
 }

@@ -24,6 +24,9 @@ export default function CreateSubtask() {
     const searchParams = useSearchParams()
     const [data, setData] = useState<TaskData | null>(null); 
 
+    
+    const [isModifiable, setIsModifiable] = useState<boolean>(false);
+
     useEffect(() => {
         
         const fetchData = async () => {
@@ -31,6 +34,11 @@ export default function CreateSubtask() {
                 const _id = searchParams.get('id');
                 const response = await axios.post("http://localhost:8000/getIndtask", { _id: _id });
                 setData(response.data);
+                const name=localStorage.getItem("user_name")
+                console.log(name)
+                console.log("ass",response.data.assigned_to)
+                await setIsModifiable(name == response.data.assigned_to);
+                console.log(isModifiable)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -40,7 +48,8 @@ export default function CreateSubtask() {
                 const _id = searchParams.get('id');
                 const response = await axios.post("http://localhost:8000/getsubtask", {TaskId:_id });
                 console.log(response.data.subtask)
-                setSubtasks(response.data.subtask)
+                await setSubtasks(response.data.subtask)
+                
             }
             catch(err){
                 console.log("Error in getting the task details",err)
@@ -50,6 +59,8 @@ export default function CreateSubtask() {
         fetchData();
         getSubtask();
     }, [searchParams]);
+
+    
 
     const handleAddSubtask = () => {
         if (subtaskInput.trim() !== '') {
@@ -96,8 +107,9 @@ export default function CreateSubtask() {
                 {data && <CardContent><p className="">{"Assigned to : " + data.assigned_to}</p></CardContent>}
                 {data && <CardContent><p className="">{"Status  :   " + data.status}</p></CardContent>}
                 <CardContent>
-                    <h1 className="mb-4 text-lg font-semibold">Create Subtask</h1>
-                    <div className="flex mb-4">
+                    <div>
+                    <h1 className="mb-4 text-lg font-semibold">Subtask</h1>
+                    {isModifiable ?<div className="flex mb-4">
                         <input
                             type="text"
                             value={subtaskInput}
@@ -106,21 +118,22 @@ export default function CreateSubtask() {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
                         />
                         <button onClick={handleAddSubtask} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Add Subtask</button>
+                    </div>:null}
                     </div>
                     <ul>
                         {subtasks.map((subtask) => (
                             <li key={subtask.id} className="py-2 border-b border-gray-200 last:border-b-0 flex justify-between items-center">
                                 <span className={`${subtask.isCompleted ? ' text-green-500' : ''}`}>{subtask.name}</span>
 
-                                <div>
+                               <div>
                                     {!subtask.isCompleted && (
                                         <>
-                                            <button onClick={() => handleRemoveSubtask(subtask.id)} className="mr-2 text-red-500 hover:text-red-600 focus:outline-none">
+                                             {isModifiable?<button onClick={() => handleRemoveSubtask(subtask.id)} className="mr-2 text-red-500 hover:text-red-600 focus:outline-none">
                                                 Remove
-                                            </button>
-                                            <button onClick={() => handleCompleteSubtask(subtask.id)} className="mr-2 text-green-500 hover:text-green-600 focus:outline-none">
+                                            </button>:null}
+                                             {isModifiable?<button onClick={() => handleCompleteSubtask(subtask.id)} className="mr-2 text-green-500 hover:text-green-600 focus:outline-none">
                                                 Complete
-                                            </button>
+                                            </button>:null}
                                         </>
                                     )}
                                     {subtask.isCompleted && <span className='text-green-500 w-6 text-xl'>&#10003;</span>}
@@ -129,9 +142,9 @@ export default function CreateSubtask() {
                         ))}
                     </ul>
                 </CardContent>
-                <div className="flex justify-center">
-        <button onClick={handleSubmit} className="p-4 mb-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit</button>
-    </div>
+                {isModifiable ?( <div className="flex justify-center">
+        <button onClick={handleSubmit} className="p-4 mb-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit the Task</button>
+    </div>):null }
 
             </Card>
         </div>

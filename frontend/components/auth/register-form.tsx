@@ -87,7 +87,7 @@ export const RegisterForm = () => {
         setSuccess("");
         seterror("");
         console.log(values);
-        toast.success("success")
+       
 
         await axios({
             method: "post",
@@ -106,9 +106,11 @@ export const RegisterForm = () => {
         }).then((res) => {
             console.log("RESPONSE :", res.data);
             if (res.data == "Already registered") {
+                toast.success("Already registered")
                 seterror("Already registered");
             }
             else {
+                toast.success("success")
                 router.push("/auth/login");
 
             }
@@ -164,6 +166,7 @@ export const RegisterForm = () => {
                                                 setPosition(selectedRole); // Update selected leave type
                                             }}
                                         >
+                                            <DropdownMenuRadioItem value="HOD">Principal</DropdownMenuRadioItem>
                                             <DropdownMenuRadioItem value="HOD">HOD</DropdownMenuRadioItem>
                                             <DropdownMenuRadioItem value="Faculty">Faculty</DropdownMenuRadioItem>
                                             <DropdownMenuRadioItem value="Non-teaching faculty">Non-teaching faculty</DropdownMenuRadioItem>

@@ -45,10 +45,14 @@ import { Input } from "@/components/ui/input"
 
 const ProfileForm=()=> {
 
- 
+  var status;
 
   const role= localStorage.getItem("user_role");
-  const isModifiable = role === "HOD";
+  let isModifiable = false;
+
+  if (role === "Principal" || role === "HOD") {
+    isModifiable = true;
+  }
   const [selectedLeaveType, setSelectedLeaveType] = useState(""); // State to hold selected leave type
 
   const formSchema = z.object({
@@ -73,7 +77,7 @@ const ProfileForm=()=> {
     }),
   })
   const router = useRouter();
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,14 +87,35 @@ const ProfileForm=()=> {
     },
   })
 
+  function roleSubmit(){
+    console.log("inside rolesumbit")
+    if(role=="HOD"){
+      router.refresh();
+      router.push("/leave_Request")
+    }
+    else{
+      router.refresh();
+      router.push("/leaveRequest_Principal")
+    }
+  }
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    
+
+    if(role=="HOD"){
+       status="Accepted by HOD"
+    }
+    else if(role=="Principal"){
+      status="Accepted"
+    }
+    else{
+      status="Pending"
+    }
     console.log(values)
      axios({
       method: "post",
       url: "http://localhost:8000/leaveRequest",
-      data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class,reason:values.reason}
+      data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class,reason:values.reason,status:status}
     }).then((res) => {
       console.log("RESPONSE :", res.data);
       form.reset();
@@ -100,20 +125,25 @@ const ProfileForm=()=> {
 
   return (
     <div>
-    <h1 className=" p-3 text-3xl font-semibold text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+    <h1 className=" p-3 text-3xl font-semibold items-center text-center text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
         Apply Leave
       </h1>
     <div>
-    {isModifiable ?(
-    <div className="flex justify-end m-4">
-       <Button type="submit" onClick={() => {
-        router.refresh();
-        router.push('/leave_Request')
-        }}>
+    
+    <div className="flex justify-end  m-4 ">
+    {isModifiable ?( <div>
+       <Button className="mr-5" type="submit" onClick= {roleSubmit}>
             View Leave Request
        </Button>
+       </div>): null}
+       <Button type="submit" onClick={()=>{
+        router.push("view_applied_leave")
+       }}>
+            View Applied Leaves
+       </Button>
       </div>
-      ): null}
+      
+      
     </div>
     <div className=" justify-center mt-10 ml-20 mr-20 text-[50px]">
       
@@ -124,9 +154,9 @@ const ProfileForm=()=> {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>UserEmail</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input placeholder="xyz@gmail.com" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -193,7 +223,7 @@ const ProfileForm=()=> {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "w-[500px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >

@@ -19,10 +19,33 @@ const addOne = async (req,res) =>{
 
 const getAll = async (req, res) => {
     try{
-      const data = await schema.find({status:"Pending"});
+        const data = await schema.find({status:"Pending"});
+        res.status(200).send(data)
+     
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
+const getIndreq=async(req,res)=>{
+    try{
+      const data=await schema.find({email:req.params.email})
       if(data){
         res.status(200).send(data)
       }
+      console.log(data)
+    }
+    catch(err){
+       console.log(err)
+    }
+}
+
+const getAllPrincipal = async (req, res) => {
+    try{
+        const data = await schema.find({status:"Accepted by HOD"});
+        res.status(200).send(data)
+     
     }
     catch(e){
         console.log(e)
@@ -75,4 +98,4 @@ const update_status=async(req,res)=>{
     }
 }
 
-module.exports={ addOne, getAll,updateOne,update_status }
+module.exports={ addOne, getAll,updateOne,update_status,getAllPrincipal,getIndreq }

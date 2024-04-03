@@ -6,7 +6,7 @@ export const Sidebar=()=>{
   const id = localStorage.getItem("user_id");
 
     return(
-      <aside className="fixed z-[1] left-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800
+      <aside className=" fixed z-[1] left-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800
       h-full w-[60px] frex p-3 flex-col gap-y-4 text-white">
          <Link href={`./announcements`}>
          <Item

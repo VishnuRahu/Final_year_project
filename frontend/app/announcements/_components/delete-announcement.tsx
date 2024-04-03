@@ -45,7 +45,7 @@ export const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({id}) => {
     try{
       await deleteAnnouncement(id);
       router.refresh();
-      toast(`Post Edited!`, { description: <span>{getCurrentDate()}</span> })
+      toast(`Post Deleted!`, { description: <span>{getCurrentDate()}</span> })
     } catch (error) {
       console.log(error);
       toast(`Something Went Wrong!`, { description: <span>{getCurrentDate()}</span> })

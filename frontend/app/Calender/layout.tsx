@@ -17,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <div>
     
     <html lang="en">
-      <Sidebar/>
+      
       <body className={inter.className}>{children}</body>
     </html>
+    </div>
   )
 }

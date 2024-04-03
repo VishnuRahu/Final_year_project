@@ -1,7 +1,6 @@
 import axios from "axios";
 import { IAnnouncement } from "@/types/announcement";
 import {ILeave} from "@/types/leaverequest"
-import {Board} from "@/types/Board"
 import { ITask } from "./types/tasks";
 
 const baseUrl = "http://localhost:8000";
@@ -58,6 +57,13 @@ export const deleteAnnouncement = async (id: string ) => {
     await axios.request(config);
 }
 
+export const getFacultyLeaveRequest=async(email:string)=>{
+    const res=await fetch(`${baseUrl}/getFacultyLeaveRequest/${email}`,{cache: 'no-store'});
+    const data=await res.json();
+    return data;
+}
+
+
 /** safely remove this once after deleting the old version of tasks */
 export const getTasks = async (role: string, name: string): Promise<ITask[]> => {
     const res = await fetch(`${baseUrl}/gettasks`, {
@@ -99,6 +105,12 @@ export const deleteTask = async (id: string ) => {
 
 export const getAllLeaveRequest = async (): Promise<ILeave[]> => {
     const res = await fetch(`${baseUrl}/leaveRequest`, {cache: 'no-store'});
+    const leaveRequests = await res.json();
+    return leaveRequests;
+}
+
+export const getAllLeaveRequestPrincipal = async (): Promise<ILeave[]> => {
+    const res = await fetch(`${baseUrl}/leaveRequestPrincipal`, {cache: 'no-store'});
     const leaveRequests = await res.json();
     return leaveRequests;
 }

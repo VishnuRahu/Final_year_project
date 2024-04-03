@@ -88,26 +88,13 @@ export default function Home() {
   }
   }
 
-  function addEvent(data: DropArg) {
+  async function addEvent(data: DropArg) {
     const title = data.draggedEl?.innerText || '';
     const event = { ...newEvent, start: data.date.toISOString(), title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() }
-    setAllEvents([...allEvents, event])
-    console.log(allEvents);
 
-    const addevent=async()=>{
-      await axios({
-        method: "post",
-        url: "http://localhost:8000/calender",
-        data: {
-          email:usermail,
-          events:allEvents    
-        },
-      }).then((res) => {
-        console.log("RESPONSE :", res.data);
-       
-      })
-    }
-    addevent();
+    let eventsArray = [...allEvents, event];
+    await axios({ method: "post", url: "http://localhost:8000/calender", data: { email:usermail, events: eventsArray }});
+    setAllEvents(eventsArray);
   }
 
   function handleDeleteModal(data: { event: { id: string } }) {
@@ -155,17 +142,15 @@ export default function Home() {
     })
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const event = { ...newEvent, id: new Date().getTime() };
-    setAllEvents([...allEvents, event]);
+    let event = { ...newEvent, id: new Date().getTime() };
+    let eventsArray = [...allEvents, event];
+    await axios({ method: "post", url: "http://localhost:8000/calender", data: { email:usermail, events: eventsArray }});
+    setAllEvents(eventsArray);
+    setNewEvent({ title: '', start: '', allDay: false, id: 0 });
     setShowModal(false);
-    setNewEvent({
-      title: '',
-      start: '',
-      allDay: false,
-      id: 0
-    });
+
     // const dropArgData = {
     //   date: new Date(event.start),
     //   view: null,

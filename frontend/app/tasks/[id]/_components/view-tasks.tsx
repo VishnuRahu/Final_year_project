@@ -24,38 +24,40 @@ const ViewTasks: React.FC<Props> = ({ tasks }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
-  {tasks.length === 0 ? (
-    <div className="flex flex-col items-center">
-      <img
-        src="/no-leave-requests-image.jpg"
-        alt="No Leave Requests"
-        className="max-w-xs"
-      />
-      <p>No leave requests found.</p>
-    </div>
-  ) : (
-    tasks.map((task, index) => (
-      <motion.div
-        key={task._id}
-        variants={variants}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: index * 0.5 }} // Delay each animation
-        className="m-1 my-2 p-1"
-      >
-        <Boardcard
-          key={task._id}
-          _id={task._id}
-          title={task.title}
-          description={task.description}
-          status={task.status}
-          assigned_to={task.assigned_to}
-        />
-      </motion.div>
-    ))
-  )}
-</div>
+    <div className="flex justify-center ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-20 mt-8 pb-10">
+                {tasks.length === 0 ? (
+                    <div className=" flex felx-col items-center justify-center">
+                        <img
+                            src="/task.jpeg"
+                            alt="No Leave Requests"
+                            className="max-w-xs"
+                        />
+                        <p className=" text-xl font-semibold">No Tasks found.</p>
+                    </div>
+                ) : (
+                    tasks.map((task, index) => (
+                        <motion.div
+                            key={task._id}
+                            variants={variants}
+                            initial="hidden"
+                            animate="visible"
+                            transition={{ delay: index * 0.5 }} // Delay each animation
+                            className="m-1 my-2 p-1"
+                        >
+                            <Boardcard
+                                key={task._id}
+                                _id={task._id}
+                                title={task.title}
+                                description={task.description}
+                                status={task.status}
+                                assigned_to={task.assigned_to}
+                            />
+                        </motion.div>
+                    ))
+                )}
+            </div>
+        </div>
 
   )
 }

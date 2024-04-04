@@ -25,11 +25,11 @@ export default function Home() {
 
 
   const [events, setEvents] = useState([
-    { title: 'event 1', id: '1' },
-    { title: 'event 2', id: '2' },
-    { title: 'event 3', id: '3' },
-    { title: 'event 4', id: '4' },
-    { title: 'event 5', id: '5' },
+    { title: 'CCM', id: '1' },
+    { title: 'HOD Meeting', id: '2' },
+    { title: 'Class', id: '3' },
+    // { title: '', id: '4' },
+    // { title: 'event 5', id: '5' },
   ])
   const [allEvents, setAllEvents] = useState<Event[]>([])
   const [showModal, setShowModal] = useState(false)
@@ -151,14 +151,7 @@ export default function Home() {
     setNewEvent({ title: '', start: '', allDay: false, id: 0 });
     setShowModal(false);
 
-    // const dropArgData = {
-    //   date: new Date(event.start),
-    //   view: null,
-    //   dateStr: '',
-    //   draggedEl: {} as HTMLElement,
-    //   allDay: event.allDay
-    // };
-    // addEvent(dropArgData);
+    
   }
 
   return (

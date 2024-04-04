@@ -19,6 +19,8 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
     const router = useRouter();
     const [cardColor, setCardColor] = useState("");
     const [role, setRole] = useState("");
+    let status="Accepted by Principal"
+    const isModifiable=status===leaveRequest.status;
 
     useEffect(() => {
         setRole(localStorage.getItem("user_role")?? '')
@@ -50,14 +52,21 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
         <>
             {/* <h1>Green colour shows - Your Leave Request is approved Red colour shows -Your Leave Request is Waiting/Declined  </h1> */}
             <Card className={`ml-6 mr-6 mb-3transition-colors duration-300 ease-in-out hover:bg-blue-100 hover:shadow-md ${cardColor}`}>
+            {isModifiable ?( <div className="flex justify-end mt-3 mr-3 ">
+            <Button className="" type="submit" onClick={()=>{router.push(`/getPdf?id=${leaveRequest._id}`)}}>
+                    Get Approved Document
+            </Button>
+            </div>): null}
                 <CardHeader>
                     <div className="flex justify-center">
                         <div className=" flex items-center space-x-4 ">
-                            
+                        
                             <div className="flex-1 space-y-2">
+                            
                                 <div className="justify-center ">
                                 <CardTitle> {"Leave Request for "+leaveRequest.email} </CardTitle>
                                 </div>   
+                               
                                 <CardDescription className="text-center"> {leaveRequest.type_of_leave} </CardDescription>   
                             </div>
                         </div>

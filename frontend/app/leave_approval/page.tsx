@@ -83,7 +83,9 @@ const ProfileForm=()=> {
     defaultValues: {
       username: "",
       designation: "",
-      leave_type: ""
+      leave_type: "",
+      reason:"",
+      alternate_class:""
     },
   })
 

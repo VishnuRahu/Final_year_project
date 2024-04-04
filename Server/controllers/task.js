@@ -27,7 +27,7 @@ const getTasks=async(req,res)=>{
         }
       }
       else if(req.body.role=="Faculty"){
-        const data=await schema.find({name:req.body.name});
+        const data=await schema.find({assigned_to:req.body.name});
         if(data){
             res.status(201).send(data)
         }
@@ -45,14 +45,17 @@ const getTasksById = async (req, res) => {
     try {
         if(id){
             const user = await userSchema.findOne({ _id: id}).select("role");
+            const user1 = await userSchema.findOne({ _id: id}).select("name");
             let role = user?.role;
-            if(role=="HOD"){
+            let name=user1?.name;
+            if(role=="HOD" || role=="Principal"){
                 const data = await schema.find({status:"Inprogress"});
                 if(data){
                     return res.status(200).send(data)
                 }
             } else if(role=="Faculty"){
-                const data = await schema.find({name:req.body.name});
+                console.log(name)
+                const data = await schema.find({assigned_to:name});
                 if(data){
                     return res.status(200).send(data)
                 }

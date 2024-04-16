@@ -49,6 +49,11 @@ const ProfileForm=()=> {
 
   const role= localStorage.getItem("user_role");
   let isModifiable = false;
+  let isHod=false;
+
+  if(role==="HOD"){
+    isHod=true;
+  }
 
   if (role === "Principal" || role === "HOD") {
     isModifiable = true;
@@ -101,6 +106,13 @@ const ProfileForm=()=> {
     }
   }
 
+  function roleSubmit1(){
+    console.log("inside rolesumbit")
+
+      router.push("/leaveRequestdenied")
+    
+  }
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     
 
@@ -121,7 +133,7 @@ const ProfileForm=()=> {
     }).then((res) => {
       console.log("RESPONSE :", res.data);
       form.reset();
-      
+      alert("Leave Request Submitted")
   })
   }
 
@@ -133,11 +145,18 @@ const ProfileForm=()=> {
     <div>
     
     <div className="flex justify-end  m-4 ">
-    {isModifiable ?( <div>
+    {isModifiable ?(<div> <div>
        <Button className="mr-5" type="submit" onClick= {roleSubmit}>
             View Leave Request
        </Button>
-       </div>): null}
+       </div>
+       </div>
+      ): null}
+      {isHod?(<div>
+       <Button className="mr-5" type="submit" onClick= {roleSubmit1}>
+            View Request Denied by principal
+       </Button>
+       </div>):null}
        <Button type="submit" onClick={()=>{
         router.push("view_applied_leave")
        }}>

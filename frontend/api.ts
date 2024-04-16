@@ -2,6 +2,7 @@ import axios from "axios";
 import { IAnnouncement } from "@/types/announcement";
 import {ILeave} from "@/types/leaverequest"
 import { ITask } from "./types/tasks";
+import {Registration} from "./types/registration"
 
 const baseUrl = "http://localhost:8000";
 
@@ -123,4 +124,16 @@ export const updateLeave = async (data: string) => {
     };
 
     await axios.request(config);
+}
+
+export const getAllRegistrationRequest = async (): Promise<Registration[]> => {
+    const res = await fetch(`${baseUrl}/registrationRequest`, {cache: 'no-store'});
+    const leaveRequests = await res.json();
+    return leaveRequests;
+}
+
+export const getAllLeaveRequestDeniedPrincipal = async (): Promise<ILeave[]> => {
+    const res = await fetch(`${baseUrl}/deniedleaveRequestPrincipal`, {cache: 'no-store'});
+    const leaveRequests = await res.json();
+    return leaveRequests;
 }

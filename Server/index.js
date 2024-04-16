@@ -19,6 +19,9 @@ app.use(task_router)
 const leave_router=require("./routes/leaverouter");
 app.use(leave_router);
 
+const admin_router=require("./routes/admin");
+app.use(admin_router);
+
 
 const leave_request_router=require("./routes/leaveRequestRouter");
 app.use(leave_request_router);

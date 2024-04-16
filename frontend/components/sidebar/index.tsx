@@ -22,6 +22,7 @@ export const Sidebar = () => {
       <Link className="m-[20px]" href={`/tasks/${id}`}> <Item key={2} id={"1232"} name={"Tasks"} imageSrc="/task.jpeg" /> </Link>
       <Link className="m-[20px]" href={`/Calender`}> <Item key={3} id={"1233"} name={"Calender"} imageSrc="/calender.png" /> </Link>
       <Link className="m-[20px]" href={`/leave_approval`}> <Item  key={4} id={"1234"} name={"Apply Leave"} imageSrc="/sick.jpeg" /> </Link>
+      <Link className="m-[20px]" href={`/auth/login`}> <Item  key={5} id={"1235"} name={"Logout"} imageSrc="/logout.png" /> </Link>
       {/* </div> */}
     </div>
   )

@@ -23,16 +23,15 @@ const userSchema=new mongoose.Schema({
         required:true,
         default:false
     },
-    isApproved:{
-        type:Boolean,
-        default:false
-    },
     signature:
     {
         data: Buffer,
         contentType: String
+    },
+    status:{
+        type:String,
+        default:"Pending"
     }
-    
 })
 
 userSchema.pre('save',function (next){

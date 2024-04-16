@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { useRouter } from 'next/navigation';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -44,36 +44,26 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
     const [open, setOpen] = useState(false);
     const [saving, setSaving] = useState(false);
 
+    const [role, setRole] = useState("");
+
+    useEffect(() => {
+        setRole(localStorage.getItem("user_role")?? '')
+    }, [])
+
 
     const formSchema = z.object({
-        // _id: z.string(),
-        // email: z.string(),
-        // designation: z.string(),
-        // type_of_leave: z.string(),
-        // from: z.date(),
-        // to: z.date(),
-        // alternate_class: z.string(),
+        
         comments_Hod: z.string().optional(),
-        // comments_Principal: z.string(),
-        // status: z.string(),
-        // reason: z.string()
+        
 
     })
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
 
         defaultValues: {
-            // _id: leaveRequest?._id, 
-            // email: leaveRequest.email, 
-            // designation: leaveRequest.designation, 
-            // type_of_leave: leaveRequest.type_of_leave,
-            // from: leaveRequest.from, 
-            // to: leaveRequest.to, 
-            // alternate_class: leaveRequest.alternate_class, 
+             
             comments_Hod: leaveRequest.comments_Hod ?? '', 
-            // comments_Principal: leaveRequest.comments_principal,
-            // status: leaveRequest.status, 
-            // reason: leaveRequest.reason
+            
         }
     })
 
@@ -85,7 +75,15 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
         //console.log("inside submit");
 
         let data = {...leaveRequest}
-        data["comments_Hod"] = values?.comments_Hod ?? '';
+        if(role=="HOD"){
+            data["comments_Hod"] = values?.comments_Hod ?? '';
+            data["status"]="Declined by HOD"
+        }
+        if(role=="Principal"){
+            data["comments_Hod"] = values?.comments_Hod ?? '';
+            data["status"]="Declined by Principal"
+        }
+        
         try {
             let payload = JSON.stringify(data);
             await updateLeave(payload);
@@ -116,7 +114,7 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
                         name="comments_Hod"
                         render={({ field }) => (
                         <FormItem>
-                            <FormLabel> HOD Comments </FormLabel>
+                            <FormLabel> Comments </FormLabel>
                             <FormControl> 
                                 <Input placeholder="enter they reason for deniel" {...field} /> 
                             </FormControl>

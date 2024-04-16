@@ -57,7 +57,6 @@ const updateOne = async (req,res) => {
     try{
         let user = req.body;
         console.log(user)
-        user.status="Declined";
         const data = await schema.updateOne({ _id : user._id}, user);
         if(data){
             return res.status(200).send({sucess: true, message: 'Post Updated!'})
@@ -138,14 +137,13 @@ const getPdf=async(req,res)=>{
             doc.moveDown(3);
             doc.font(regularFontPath).text('Apply leave',{align:'center',underline: true});
             doc.moveDown(1);
-            doc.font(regularFontPath).text(`Date: `,{align:'right'});
+            
             doc.moveDown(3);
             const firstLineIndentation = 20;
             doc.text(' '.repeat(firstLineIndentation), { continued: true });
             doc.font(regularFontPath).text(`This is to confirm that ${email} requested ${type} leave,from the start date ${from} to the end date ${to}.due to ${reason}.The leave request was approved by both the Head of Department (HOD) and the Principal.`);
-
             // doc.moveDown(2);
-            // const secondLineIndentation = 10;
+            const secondLineIndentation = 5;
             // doc.text(' '.repeat(secondLineIndentation), { continued: true });
             // doc.font(regularFontPath).text(`1. Date of Birth `);
             // doc.text(' '.repeat(secondLineIndentation), { continued: true });
@@ -163,16 +161,78 @@ const getPdf=async(req,res)=>{
             // doc.moveDown(2);
             // doc.font(regularFontPath).text(`The Certificate is issued on his request to enable him to apply for sick leave`);
             
-            const imgData =await userSchema.findOne({email:req.body.email}).select('signature')
-            console.log("imagedata",imgData)
-            if (imgData && imgData.data) {
-              const base64Image = imgData.data.toString('base64');
+          //const secondLineIndentation = 8;
+
+          doc.moveDown(6);
+
+          doc.moveDown(6);
+
+          // Fetch both images in parallel
+          const imgDataPromise = userSchema.findOne({ email: req.body.email }).select('signature.data');
+          const hodImgDataPromise = userSchema.findOne({ role: "HOD" }).select('signature.data');
+          const principalImgDataPromise = userSchema.findOne({ role: "Principal" }).select('signature.data');
+          
+          // Resolve both promises concurrently
+          const [imgData, imgData1,imgData2] = await Promise.all([imgDataPromise, hodImgDataPromise,principalImgDataPromise]);
+          
+          // Define image width and height
+          const imageWidth = 50;
+          const imageHeight = 50;
+          
+          // Set initial x-coordinate for the first image
+          let xCoordinate = doc.page.margins.left;
+          
+          // Embed the first image
+          if (imgData && imgData.signature && imgData.signature.data) {
+              const base64Image = imgData.signature.data.toString('base64');
               doc.image(`data:image/jpeg;base64,${base64Image}`, {
-                  width: 100, // Set width as needed
-                  height: 100 // Set height as needed
+                  width: imageWidth, 
+                  height: imageHeight,
+                  align: 'left', // Align the image to the left
+                  x: xCoordinate, // Set x-coordinate
+                  y: doc.y // Set y-coordinate
               });
+          
+              // Increase x-coordinate for the next image
+              xCoordinate += imageWidth + 80; // Adding 10 for spacing between images
           }
-            
+         
+          
+          // Embed the second image
+          if (imgData1 && imgData1.signature && imgData1.signature.data) {
+              const base64Image = imgData1.signature.data.toString('base64');
+              doc.image(`data:image/jpeg;base64,${base64Image}`, {
+                  width: imageWidth, 
+                  height: imageHeight,
+                  align: 'left', // Align the image to the left
+                  x: xCoordinate, // Set x-coordinate
+                  y: doc.y // Set y-coordinate
+              });
+              xCoordinate += imageWidth + 80; 
+            }
+
+            if (imgData2 && imgData2.signature && imgData2.signature.data) {
+                const base64Image = imgData2.signature.data.toString('base64');
+                doc.image(`data:image/jpeg;base64,${base64Image}`, {
+                    width: imageWidth, 
+                    height: imageHeight,
+                    align: 'left', // Align the image to the left
+                    x: xCoordinate, // Set x-coordinate
+                    y: doc.y // Set y-coordinate
+                });
+                
+              }
+
+
+          doc.moveDown(4);
+          doc.text(' '.repeat(secondLineIndentation), { continued: true });
+          
+          doc.font(regularFontPath).text(`Faculty Signature       HOD Signature        Principal Signature`);  
+
+          //doc.text(' '.repeat(secondLineIndentation), { continued: true });
+          //doc.font(regularFontPath).text(`HOD Signature`); 
+        
+          
             
             doc.save()
             
@@ -184,7 +244,7 @@ const getPdf=async(req,res)=>{
                 const pdfContents = pdfBuffer.getContents();
                 // const content = atob(pdfContents)
                 content = pdfContents.toString('base64')
-                console.log(content);
+                //console.log(content);
                 // console.log(pdfContents.toString('base64'));
                 //getting back the pdf from the buffer
                 //fs.writeFileSync('./temppdf/original1.pdf', pdfContents);
@@ -210,16 +270,16 @@ const getPdf=async(req,res)=>{
 
                 //console.log("The current date is " + currentDate); 
                 let date1 = new Date(currentDate)
-                const bfname = "_bonafide_"+currentDate
+                //const bfname = "_bonafide_"+currentDate
 
-                console.log(bfname)
+                //console.log(bfname)
 
 
                 // Set up Multer for handling file uploads
                 // const storage = multer.memoryStorage(); // Store files in memory
                 // const upload = multer({ storage: storage });
  
-                 console.log(content);
+                 //console.log(content);
 
                  const base64String = Buffer.from(content).toString()
                  return res.json({
@@ -232,8 +292,19 @@ const getPdf=async(req,res)=>{
         
     }
     catch(err){
-        console.log("from applyBonafide",err)
+        console.log("from generatepdf",err)
     }
 }
 
-module.exports={ addOne, getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById }
+const deniedleaveRequestPrincipal = async (req, res) => {
+    try{
+        const data = await schema.find({status:"Denied by Principal"});
+        res.status(200).send(data)
+     
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
+module.exports={ addOne, getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById,deniedleaveRequestPrincipal }

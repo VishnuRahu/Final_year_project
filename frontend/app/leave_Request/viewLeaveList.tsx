@@ -41,7 +41,7 @@ export const ViewLeaveRequest: React.FC<ViewLeaveRequestProps> = ({ leaveRequest
             variants={variants}
             initial="hidden"
             animate="visible"
-            transition={{ delay: index * 0.5 }} // Delay each animation
+            transition={{ delay: index * 0.5 }} 
             className="m-1 my-2 p-1"
           >
             <LeaveRequest leaveRequest={leaveRequest} />

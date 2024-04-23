@@ -16,7 +16,7 @@ export const Registrationlist: React.FC<ViewRegistrationRequestProps>  = ({regis
 
     const router = useRouter();
 
-    const handleSubmit=(_id:String,status:String)=>{
+    const handleSubmit=(_id:String,status:String,name:String)=>{
         console.log(_id);
         axios({
             method: "put",
@@ -29,6 +29,7 @@ export const Registrationlist: React.FC<ViewRegistrationRequestProps>  = ({regis
             console.log("RESPONSE :", res.data);
             router.refresh();
           })
+          alert(`${name} registration request is ${status}`)
     }
 
     
@@ -56,10 +57,9 @@ export const Registrationlist: React.FC<ViewRegistrationRequestProps>  = ({regis
                 <CardContent> <p className=""> {"Name : "+registrationRequest.name} </p> </CardContent>
                 <CardContent> <p className=""> {"Email : "+registrationRequest.email} </p> </CardContent>
                 <CardContent> <p className=""> {"Role : "+registrationRequest.role} </p> </CardContent>
-                <CardContent> <p className=""> {"Aided staff : "+registrationRequest.isAided} </p> </CardContent>
                 <div className="flex  p-6 justify-center ">
-                         <Button className="mr-9 bg-green-500 text-white"  onClick={() => { handleSubmit(registrationRequest._id, "Success") }}>Accept</Button>
-                        <Button className="mr-9" variant={"destructive"} onClick={()=>{handleSubmit(registrationRequest._id,"Declined")}}>Decline</Button>   
+                         <Button className="mr-9 bg-green-500 text-white"  onClick={() => { handleSubmit(registrationRequest._id, "Success",registrationRequest.name) }}>Accept</Button>
+                        <Button className="mr-9" variant={"destructive"} onClick={()=>{handleSubmit(registrationRequest._id,"Declined",registrationRequest.name)}}>Decline</Button>   
                         
             </div>
             </Card>

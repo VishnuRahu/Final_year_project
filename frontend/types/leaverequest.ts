@@ -6,8 +6,7 @@ export interface ILeave {
     from: Date;
     to: Date;
     alternate_class:string;
-    comments_Hod:string;
-    comments_principal:string;
+    comments:string;
     status:string;
     reason:string;
 }

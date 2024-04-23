@@ -1,17 +1,80 @@
 const schema=require("../models/leaveRequest")
 const userSchema=require("../models/userSchema")
+const leaveSchema=require("../models/leave")
 
 const addOne = async (req,res) =>{
     try{
-        console.log(req.body)
-        const data = new schema(req.body);
-        const result = await data.save()
-        if(result){
-            res.json({ status:"success", message:"announcement Detail added" })
+        console.log(req.body);
+        const fetch=await leaveSchema.find({email:req.body.email})
+        console.log("fetched:",fetch[0])
+        const date1=new Date(req.body.from)
+        const date2=new Date(req.body.to)
+        const differenceInMilliseconds = Math.abs(date2 -date1);
+
+        const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+        
+        console.log("dif",differenceInDays)
+        if(req.body.type_of_leave=="casual_leave"){
+            if(fetch[0].casual_leave<differenceInDays){
+                res.send("Not enough days")
+            }
+            else{
+                const data = new schema(req.body);
+                const result = await data.save()
+                if(result){
+                    res.json({ status:"success", message:"announcement Detail added" })
+                }
+                else{
+                    res.send("error")
+                }
+            }
         }
-        else{
-            res.send("error")
+        else if(req.body.type_of_leave=="Earned_leave"){
+            if(fetch[0].Earned_leave<differenceInDays){
+                res.send("Not enough days")
+            }
+            else{
+                const data = new schema(req.body);
+                const result = await data.save()
+                if(result){
+                    res.json({ status:"success", message:"announcement Detail added" })
+                }
+                else{
+                    res.send("error")
+                }
+            }
         }
+        else if(req.body.type_of_leave=="Medial_leave"){
+            if(fetch[0].Medial_leave<differenceInDays){
+                res.send("Not enough days")
+            }
+            else{
+                const data = new schema(req.body);
+                const result = await data.save()
+                if(result){
+                    res.json({ status:"success", message:"announcement Detail added" })
+                }
+                else{
+                    res.send("error")
+                }
+            }
+        }
+        else if(req.body.type_of_leave=="Onduty"){
+            if(fetch[0].Onduty<differenceInDays){
+                res.send("Not enough days")
+            }
+            else{
+                const data = new schema(req.body);
+                const result = await data.save()
+                if(result){
+                    res.json({ status:"success", message:"announcement Detail added" })
+                }
+                else{
+                    res.send("error")
+                }
+            }
+        }
+        
     }catch(error){
         console.log(error)
     }
@@ -27,6 +90,18 @@ const getAll = async (req, res) => {
     catch(e){
         console.log(e)
     }
+}
+
+const getLeave=async(req,res)=>{
+    try{
+        const data = await schema.find({email:req.body.email});
+        res.status(200).send(data)
+     
+    }
+    catch(e){
+        console.log(e)
+    }
+
 }
 
 const getIndreq=async(req,res)=>{
@@ -128,12 +203,13 @@ const getPdf=async(req,res)=>{
             doc.pipe(pdfBuffer)
 
             const email=req.body.email;
-            
+            console.log("reason",req.body.reason)
             const reason=req.body.reason;
             const type=req.body.leave_type;
             const to=req.body.to;
             const from=req.body.from;
             console.log("to",to)
+            console.log("reason",reason)
             doc.moveDown(3);
             doc.font(regularFontPath).text('Apply leave',{align:'center',underline: true});
             doc.moveDown(1);
@@ -298,7 +374,7 @@ const getPdf=async(req,res)=>{
 
 const deniedleaveRequestPrincipal = async (req, res) => {
     try{
-        const data = await schema.find({status:"Denied by Principal"});
+        const data = await schema.find({status:"Declined by Principal"});
         res.status(200).send(data)
      
     }
@@ -307,4 +383,4 @@ const deniedleaveRequestPrincipal = async (req, res) => {
     }
 }
 
-module.exports={ addOne, getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById,deniedleaveRequestPrincipal }
+module.exports={ addOne, getLeave,getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById,deniedleaveRequestPrincipal }

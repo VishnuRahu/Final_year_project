@@ -53,7 +53,7 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
 
     const formSchema = z.object({
         
-        comments_Hod: z.string().optional(),
+        comments: z.string().optional(),
         
 
     })
@@ -62,7 +62,7 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
 
         defaultValues: {
              
-            comments_Hod: leaveRequest.comments_Hod ?? '', 
+            comments: leaveRequest.comments ?? '', 
             
         }
     })
@@ -76,11 +76,11 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
 
         let data = {...leaveRequest}
         if(role=="HOD"){
-            data["comments_Hod"] = values?.comments_Hod ?? '';
+            data["comments"] = values?.comments ?? '';
             data["status"]="Declined by HOD"
         }
         if(role=="Principal"){
-            data["comments_Hod"] = values?.comments_Hod ?? '';
+            data["comments"] = values?.comments ?? '';
             data["status"]="Declined by Principal"
         }
         
@@ -111,7 +111,7 @@ export const DeclineLeave: React.FC<EditLeaveRequestProps> = ({ leaveRequest }) 
                     <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-8">
                     <FormField
                         control={form.control}
-                        name="comments_Hod"
+                        name="comments"
                         render={({ field }) => (
                         <FormItem>
                             <FormLabel> Comments </FormLabel>

@@ -17,15 +17,24 @@ interface ViewLeaveRequestProps {
 export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) => {
 
     const router = useRouter();
+    const [isModifiable, setIsModifiable] = useState<boolean>(true);
+    const [isModifiableComments, setIsModifiableComments] = useState<boolean>(false);
+    
+    
 
     const [role, setRole] = useState("");
 
     useEffect(() => {
-        setRole(localStorage.getItem("user_role")?? '')
-    }, [])
+        setRole(localStorage.getItem("user_role") ?? '');
+        if (leaveRequest.status === "Declined by Principal") {
+            setIsModifiable(false);
+            setIsModifiableComments(true);
+        }
+    }, [leaveRequest.status]); 
     
-    const handleSubmit=(_id:String)=>{
+    const handleSubmit=(_id:String,email:String)=>{
         console.log(_id,role);
+        alert(email+" leave request accepted")
         axios({
             method: "put",
             url: "http://localhost:8000/leaveRequestApproval",
@@ -60,12 +69,13 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
                 <CardContent> <p className=""> {"Leave From : "+leaveRequest.from} </p> </CardContent>
                 <CardContent> <p className=""> {"Leave to : "+leaveRequest.to} </p> </CardContent>
                 <CardContent> <p className=""> {"Alternate Class Details : "+leaveRequest.alternate_class} </p> </CardContent>
-            
-            
-            <div className="flex  p-6 justify-center ">
-                        <Button className="mr-9" variant={"destructive"} onClick={()=>{handleSubmit(leaveRequest._id)}}>Accept</Button>   
+                {isModifiableComments?<div>
+                    <CardContent> <p className=""> {"Comments: "+leaveRequest.comments} </p> </CardContent>
+                </div>:null}
+                {isModifiable ?<div className="flex  p-6 justify-center ">
+                        <Button className="mr-9 bg-green-500"  onClick={()=>{handleSubmit(leaveRequest._id,leaveRequest.email)}}>Accept</Button>   
                         <DeclineLeave leaveRequest={leaveRequest}/> 
-            </div>
+            </div>:null}
             </Card>
         </>
     )

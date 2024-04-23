@@ -37,10 +37,7 @@ const leaveRequestSchema=new mongoose.Schema({
             type:Boolean,
             default:false
         },
-        comments_Hod:{
-          type:String
-        },
-        comments_Principal:{
+        comments:{
           type:String
         },
         status:{

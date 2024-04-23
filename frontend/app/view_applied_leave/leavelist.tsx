@@ -50,7 +50,6 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
 
     return (
         <>
-            {/* <h1>Green colour shows - Your Leave Request is approved Red colour shows -Your Leave Request is Waiting/Declined  </h1> */}
             <Card className={`ml-6 mr-6 mb-3transition-colors duration-300 ease-in-out hover:bg-blue-100 hover:shadow-md ${cardColor}`}>
             {isModifiable ?( <div className="flex justify-end mt-3 mr-3 ">
             <Button className="" type="submit" onClick={()=>{router.push(`/getPdf?id=${leaveRequest._id}`)}}>
@@ -77,7 +76,11 @@ export const LeaveRequest: React.FC<ViewLeaveRequestProps>  = ({leaveRequest}) =
                 <CardContent> <p className=""> {"Leave to : "+leaveRequest.to} </p> </CardContent>
                 <CardContent> <p className=""> {"Status : "+leaveRequest.status} </p> </CardContent>
                 <CardContent> <p className=""> {"Alternate Class Details : "+leaveRequest.alternate_class} </p> </CardContent>
-            
+                {(leaveRequest.status === "Declined by HOD"|| leaveRequest.status === "Declined by Principal") && (
+                    <CardContent>
+                        <p className=""> {"Comments: " +leaveRequest.comments} </p>
+                    </CardContent>
+                )}
             
            
             </Card>

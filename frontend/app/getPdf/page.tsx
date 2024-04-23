@@ -13,7 +13,6 @@ const DisplayPdf = () => {
             try {
                 const _id = searchParams.get('id');
                 const response = await axios.post("http://localhost:8000/getLeaveById", { _id });
-                console.log("karadi paal", response.data[0]);
                 setEmail(response.data[0].email);
                 console.log("fetched data:", response.data[0].email);
 
@@ -22,7 +21,8 @@ const DisplayPdf = () => {
                     from: response.data[0].from,
                     to: response.data[0].to,
                     leave_type: response.data[0].type_of_leave,
-                    alternate: response.data[0].alternate_class
+                    alternate: response.data[0].alternate_class,
+                    reason:response.data[0].reason
                 });
                 console.log("PDF RESPONSE:", pdfResponse.data);
                 setPdfData(pdfResponse.data.content);
@@ -35,10 +35,8 @@ const DisplayPdf = () => {
 
     return (
         <div>
-            <button onClick={() => console.log("Email:", email)}>Log Email</button>
-
             {pdfData && (
-                <embed src={`data:application/pdf;base64,${pdfData}`} type="application/pdf" width="100%" height="500px" />
+                <embed src={`data:application/pdf;base64,${pdfData}`} type="application/pdf" width="100%" height="800px" />
             )}
         </div>
     );

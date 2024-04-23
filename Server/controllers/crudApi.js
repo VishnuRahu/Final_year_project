@@ -130,7 +130,8 @@ const login=async(req,res)=>{
     try{
         const email = req.body.email;
         const result = await schema.findOne({email:email});
-        if(result=="null"){
+        console.log(result)
+        if(result==null){
             res.send({ success: false , message: "Not a registered User." })
         }
         else if(result.status=="Pending"){

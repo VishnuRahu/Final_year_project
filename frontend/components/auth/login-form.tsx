@@ -50,8 +50,12 @@ export const LoginForm=()=>{
         setSuccess("");
         seterror("");
         if(values.email=="admin@gmail.com"){
-            if(values.password=="admin@123")
-                  router.push("/admin");
+            if(values.password==="admin@123"){
+                router.push("/admin");   
+            }  
+            else{
+                seterror("invalid credentials");
+            }
         }
         axios({
             method:"post",

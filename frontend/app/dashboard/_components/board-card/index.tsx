@@ -34,7 +34,7 @@ export const Boardcard: React.FC<BoardcardProps>=({
                   alt="hello"
                   src="/tsk1.jpeg"
                   fill
-                  className="h-0.5"
+                  className="h-5"
                />
                <Overlay id={_id}/>
                </div>

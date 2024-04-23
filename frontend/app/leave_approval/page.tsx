@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { date, z } from "zod"
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
@@ -46,7 +46,7 @@ import { Input } from "@/components/ui/input"
 const ProfileForm=()=> {
 
   var status;
-
+ 
   const role= localStorage.getItem("user_role");
   let isModifiable = false;
   let isHod=false;
@@ -58,7 +58,7 @@ const ProfileForm=()=> {
   if (role === "Principal" || role === "HOD") {
     isModifiable = true;
   }
-  const [selectedLeaveType, setSelectedLeaveType] = useState(""); // State to hold selected leave type
+  const [selectedLeaveType, setSelectedLeaveType] = useState(""); 
 
   const formSchema = z.object({
     username: z.string().min(2, {
@@ -115,12 +115,11 @@ const ProfileForm=()=> {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     
-
     if(role=="HOD"){
        status="Accepted by HOD"
     }
     else if(role=="Principal"){
-      status="Accepted"
+      status="Accepted by Principal"
     }
     else{
       status="Pending"
@@ -132,9 +131,18 @@ const ProfileForm=()=> {
       data: {email:values.username,Designation:values.designation,type_of_leave:values.leave_type,from:values.from,to:values.to,alternate_class:values.alternate_class,reason:values.reason,status:status}
     }).then((res) => {
       console.log("RESPONSE :", res.data);
-      form.reset();
-      alert("Leave Request Submitted")
+      if(res.data=="Not enough days"){
+        alert("Kindly check the available leaves with the admin");
+
+      }
+      else{
+        alert("Leave Request Submitted")
+        form.reset();
+      }
+      
+      
   })
+  
   }
 
   return (
@@ -222,10 +230,10 @@ const ProfileForm=()=> {
                       setSelectedLeaveType(selectedRole); // Update selected leave type
                     }}
                   >
-                    <DropdownMenuRadioItem value="Casual Leave">Casual Leave</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="Earned Leave">Earned Leave</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="Medial Leave">Medical</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="Onduty Leave">OnDuty</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="casual_leave">Casual Leave</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="Earned_leave">Earned Leave</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="Medial_leave">Medical</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="Onduty">OnDuty</DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

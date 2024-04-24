@@ -65,7 +65,13 @@ export default function Home() {
         },
       }).then((res) => {
         console.log("RESPONSE :", res.data[0].events);
-        setAllEvents(res.data[0].events)
+        if(res.data=="no data"){
+          
+        }
+        else{
+          setAllEvents(res.data[0].events)
+        }
+        
        
       })
     }

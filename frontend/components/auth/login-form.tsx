@@ -57,37 +57,42 @@ export const LoginForm=()=>{
                 seterror("invalid credentials");
             }
         }
-        axios({
-            method:"post",
-            url:"http://localhost:8000/login",
-            data:{ email:values.email, password:values.password }
-        }).then((res)=>{
+        else{
 
-                let user = res.data?.data;
-                console.log('user :', user)
+            axios({
+                method:"post",
+                url:"http://localhost:8000/login",
+                data:{ email:values.email, password:values.password }
+            }).then((res)=>{
+    
+                    let user = res.data?.data;
+                    console.log('user :', user)
+    
+                    if (res?.data?.success) {
+                        localStorage.setItem("user_role", user.role);
+                        localStorage.setItem("user_id", user?._id);
+                        localStorage.setItem("user_name",user?.name);
+                        localStorage.setItem("user_email",user?.email);
+                        router.push("/announcements");
+                    } else {
+                        seterror(res?.data?.message)
+                    }
+    
+                    // if(res.data=="notApproved"){
+                    //     seterror("Admin not approved your request")
+                    // }
+                    // else if(res.data=="False"){
+                    //     seterror("Invalid Credentials");
+                    // }
+                    // else{
+                    //     localStorage.setItem("user_role", res.data )
+                    //     router.push("/announcements");
+                    // }
+                    
+                })
 
-                if (res?.data?.success) {
-                    localStorage.setItem("user_role", user.role);
-                    localStorage.setItem("user_id", user?._id);
-                    localStorage.setItem("user_name",user?.name);
-                    localStorage.setItem("user_email",user?.email);
-                    router.push("/announcements");
-                } else {
-                    seterror(res?.data?.message)
-                }
-
-                // if(res.data=="notApproved"){
-                //     seterror("Admin not approved your request")
-                // }
-                // else if(res.data=="False"){
-                //     seterror("Invalid Credentials");
-                // }
-                // else{
-                //     localStorage.setItem("user_role", res.data )
-                //     router.push("/announcements");
-                // }
-                
-            })
+        }
+      
         
     } 
 

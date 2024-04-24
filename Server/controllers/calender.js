@@ -35,12 +35,19 @@ const addOne = async (req,res) =>{
 
 const getAll = async (req, res) => {
     try{
-      const email=req.body.email  
-      const data = await schema.find({email:email}).select("events");
+      const email=req.body.email 
+      const check_user=await schema.find({email:email})
+      if(check_user){
+        const data = await schema.find({email:email}).select("events");
       console.log(data[0].events)
       if(data){
         res.status(200).send(data)
       }
+    } 
+    else{
+        res.send("no data")
+    }
+      
     }
     catch(e){
         console.log(e)

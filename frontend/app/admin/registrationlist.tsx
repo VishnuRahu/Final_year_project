@@ -30,6 +30,7 @@ export const Registrationlist: React.FC<ViewRegistrationRequestProps>  = ({regis
             router.refresh();
           })
           alert(`${name} registration request is ${status}`)
+          window.location.reload();
     }
 
     

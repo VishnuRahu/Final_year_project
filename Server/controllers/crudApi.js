@@ -138,6 +138,8 @@ const login=async(req,res)=>{
             res.send({ success: false , message: "User account is not yet activated, Contact admin for the support" })
         }else if(result && await bcrypt.compare(req.body.password,result.password) ){
             res.send({ success: true , message: "Valid User", data: result })
+        }else if(result.status=="Declined"){
+            res.send({ success: false , message: "User account is Declined, Contact admin for the support" })
         } else {
             res.send({ success: false , message: "Invalid Credentials" })
         }

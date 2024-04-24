@@ -5,15 +5,18 @@ import { motion, easeIn } from "framer-motion";
 import { Registrationlist } from "@/app/admin/registrationlist";
 import { Registration } from "@/types/registration";
 import { getAllRegistrationRequest } from "@/api";
+import { useRouter } from 'next/navigation';
 
 const ViewLeaveRequest = () => {
   const [registrationRequests, setregistrationRequests] = useState<Registration[]>([]);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getAllRegistrationRequest();
+        router.refresh();
         setregistrationRequests(data);
+        
       } catch (error) {
         console.error("Error fetching leave requests:", error);
       }

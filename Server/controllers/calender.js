@@ -37,7 +37,8 @@ const getAll = async (req, res) => {
     try{
       const email=req.body.email 
       const check_user=await schema.find({email:email})
-      if(check_user){
+      console.log(check_user)
+      if(check_user.length>0){
         const data = await schema.find({email:email}).select("events");
       console.log(data[0].events)
       if(data){

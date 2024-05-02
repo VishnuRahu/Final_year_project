@@ -1,15 +1,16 @@
 "use client"
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from "axios";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"
 
 interface Subtask {
     id: number;
     name: string;
     isCompleted: boolean; 
 }
-
 interface TaskData {
     _id: string;
     title: string;
@@ -17,16 +18,13 @@ interface TaskData {
     assigned_to: string;
     status: string;
 }
-
 export default function CreateSubtask() {
     const [subtasks, setSubtasks] = useState<Subtask[]>([]);
     const [subtaskInput, setSubtaskInput] = useState('');
     const searchParams = useSearchParams()
     const [data, setData] = useState<TaskData | null>(null); 
-
-    
     const [isModifiable, setIsModifiable] = useState<boolean>(false);
-
+    const [_id,setId]=useState("")
     useEffect(() => {
         
         const fetchData = async () => {
@@ -60,10 +58,9 @@ export default function CreateSubtask() {
         getSubtask();
     }, [searchParams]);
 
-    
-
     const handleAddSubtask = () => {
-        if (subtaskInput.trim() !== '') {
+        if (subtaskInput.trim() !== '') 
+        {
             setSubtasks([...subtasks, { id: Date.now(), name: subtaskInput, isCompleted: false }]);
             setSubtaskInput('');
         }
@@ -77,10 +74,24 @@ export default function CreateSubtask() {
         setSubtasks(subtasks.map(subtask => subtask.id === id ? { ...subtask, isCompleted: true } : subtask));
     };
 
+    const markComplete=(_id:string)=>{
+        alert(_id)
+        axios({
+            method: "put",
+            url: "http://localhost:8000/updateTask",
+            data: {
+              _id:_id
+            },
+          }).then((res) => {
+            console.log("PDF RESPONSE:", res.data);
+            
+          })
+    }
     const handleSubmit=()=>{
         const getSubtask=async()=>{
             try{
-                const _id = searchParams.get('id');
+                const idParam = searchParams.get('id');
+                setId(idParam ? idParam : "");
                 const response = await axios.post("http://localhost:8000/addSubtask", {TaskId:_id,subtask:subtasks });
                 console.log(response)
                 
@@ -92,10 +103,14 @@ export default function CreateSubtask() {
         getSubtask();
         alert("Subtask are saved and it is shown to higher officials")
     }
-
     return (
         <div>
             <Card className="mt-6 mx-6 mb-3 transition-colors duration-300 ease-in-out hover:bg-blue-100 hover:shadow-md">
+            <div className="flex justify-end mt-3 mr-3 ">
+            <Button className="" type="submit" onClick={()=>{ data && markComplete(data._id) }}>
+                    Mark as complete
+            </Button>
+            </div>
                 <div className="flex justify-center">
                     <div className="flex items-center space-x-4">
                         <div className="flex-1 space-y-2">
@@ -144,7 +159,7 @@ export default function CreateSubtask() {
                     </ul>
                 </CardContent>
                 {isModifiable ?( <div className="flex justify-center">
-        <button onClick={handleSubmit} className="p-4 mb-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit the Task</button>
+        <button onClick={handleSubmit} className="p-4 mb-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit the Subtask</button>
     </div>):null }
 
             </Card>

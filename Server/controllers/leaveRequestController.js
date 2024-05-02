@@ -2,6 +2,13 @@ const schema=require("../models/leaveRequest")
 const userSchema=require("../models/userSchema")
 const leaveSchema=require("../models/leave")
 
+const regularFontPath = './Times New Roman/times new roman.ttf';
+const buffer = require('stream-buffers').WritableStreamBuffer;
+const PDFDocument = require('pdfkit');
+const doc = new PDFDocument();
+const pdfBuffer = new buffer();
+let base64String;
+
 const addOne = async (req,res) =>{
     try{
         console.log(req.body);
@@ -192,14 +199,6 @@ const getPdf=async(req,res)=>{
     try{
          
             console.log(req.body.email);
-
-            
-            const regularFontPath = './Times New Roman/times new roman.ttf';
-            const buffer = require('stream-buffers').WritableStreamBuffer;
-            const PDFDocument = require('pdfkit');
-            const doc = new PDFDocument();
-            const pdfBuffer = new buffer();
-
             doc.pipe(pdfBuffer)
 
             const email=req.body.email;
@@ -318,7 +317,7 @@ const getPdf=async(req,res)=>{
             
             pdfBuffer.on('finish', () => {
                 const pdfContents = pdfBuffer.getContents();
-                // const content = atob(pdfContents)
+                const content = atob(pdfContents)
                 content = pdfContents.toString('base64')
                 //console.log(content);
                 // console.log(pdfContents.toString('base64'));
@@ -383,4 +382,51 @@ const deniedleaveRequestPrincipal = async (req, res) => {
     }
 }
 
-module.exports={ addOne, getLeave,getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById,deniedleaveRequestPrincipal }
+const getLeaveDetails = async (req, res) => {
+    try {
+      const leaves = await schema.find({ from: { $gte: req.body.from }, to: { $lte: req.body.to } }).sort({ from: -1 });
+      
+      // Create a PDF document
+      const doc = new PDFDocument();
+      const buffers = [];
+      doc.on('data', buffers.push.bind(buffers));
+      doc.on('end', () => {
+        const pdfData = Buffer.concat(buffers);
+        const base64String = pdfData.toString('base64');
+        res.json({ message: "download", content: base64String });
+      });
+  
+      leaves.forEach(function (leave) {
+        var reason = leave.reason;
+        doc.font(regularFontPath).text('Leave Details', { align: 'center', underline: true });
+        doc.moveDown(2);
+        const firstLineIndentation = 20;
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`Leave Request for ${leave.email} `);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`Type of leave : ${leave.type_of_leave}`);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`From : ${leave.from}`);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`To : ${leave.to}`);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`Reason : ${leave.reason}`);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text(`Alternate class : ${leave.alternate_class}`);
+        doc.text(' '.repeat(firstLineIndentation), { continued: true });
+        doc.font(regularFontPath).text("-------------------------------------------------------------------------");
+  
+        const secondLineIndentation = 5;
+        doc.moveDown(3);
+        console.log(reason);
+      });
+  
+      // Finalize and close the PDF document
+      doc.end();
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+  
+module.exports={ addOne, getLeave,getAll,updateOne,update_status,getAllPrincipal,getIndreq,getPdf,getLeaveById,deniedleaveRequestPrincipal,getLeaveDetails }

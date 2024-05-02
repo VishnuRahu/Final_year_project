@@ -49,7 +49,7 @@ const getTasksById = async (req, res) => {
             let role = user?.role;
             let name=user1?.name;
             if(role=="HOD" || role=="Principal"){
-                const data = await schema.find({status:"Inprogress"});
+                const data = await schema.find();
                 if(data){
                     return res.status(200).send(data)
                 }
@@ -96,10 +96,26 @@ const deleteTask = async (req,res) => {
     }
 }
 
+const updateTask=async(req,res)=>{
+    const _id=req.body._id;
+    console.log(_id)
+    try{
+        const res=await schema.updateOne({_id:_id},{$set:{status:"completed"}})
+        if(res){
+            return res.status(200).send({sucess: true, message: 'Post Updated!'})
+        } else {
+            return res.status(400).send({sucess: false, message: 'Error in Update'})
+        }
+    }catch (error) {
+        console.log('error :', error);
+    }
+}
+
 module.exports={
     addTasks,
     getTasks,
     deleteTask,
     getIndtasks,
-    getTasksById
+    getTasksById,
+    updateTask
 }
